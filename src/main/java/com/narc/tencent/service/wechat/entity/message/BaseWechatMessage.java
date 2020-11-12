@@ -1,9 +1,12 @@
 package com.narc.tencent.service.wechat.entity.message;
 
+import lombok.Data;
+
 /**
  * @author : Narcssus
  * @date : 2020/10/13 15:34
  */
+@Data
 public class BaseWechatMessage {
     /**
      * 开发者微信号
@@ -25,35 +28,5 @@ public class BaseWechatMessage {
      * 消息id，64位整型
      */
     private String MsgId;
-    public String getToUserName() {
-        return ToUserName;
-    }
-    public void setToUserName(String toUserName) {
-        ToUserName = toUserName;
-    }
-    public String getFromUserName() {
-        return FromUserName;
-    }
-    public void setFromUserName(String fromUserName) {
-        FromUserName = fromUserName;
-    }
-    public long getCreateTime() {
-        return CreateTime;
-    }
-    public void setCreateTime(long createTime) {
-        CreateTime = createTime;
-    }
-    public String getMsgType() {
-        return MsgType;
-    }
-    public void setMsgType(String msgType) {
-        MsgType = msgType;
-    }
-    public String getMsgId() {
-        return MsgId;
-    }
-    public void setMsgId(String msgId) {
-        MsgId = msgId;
-    }
 
 }

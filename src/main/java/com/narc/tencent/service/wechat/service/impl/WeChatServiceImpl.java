@@ -38,11 +38,10 @@ public class WeChatServiceImpl implements WeChatService {
         String msgType = map.get("MsgType");
         // 默认回复一个"success"
         String responseMessage = "success";
-
         String content = map.get("Content");
         log.info("content=" + map.get("Content"));
         // 对消息进行处理
-        if (WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {// 文本消息
+        if (WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {
             TextMessage textMessage = new TextMessage();
             textMessage.setMsgType(WechatMessageUtil.MESSAGE_TEXT);
             textMessage.setToUserName(fromUserName);
