@@ -1,0 +1,26 @@
+server:
+  port: 8800
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: tencent
+  cloud:
+    config:
+      discovery:
+        enabled: true # 通过服务发现的方式去找配置中心
+        service-id: config # 配置中心的名字，直接配置名称可以在配置中心集群的时候实现负载均衡
+      profile: base # 对应配置中心文件的${profile}部分
+
+local-ip: 106.52.120.197
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://test:narc1234@eurekaServer2:8761/eureka/,http://test:narc1234@eurekaServer1:8761/eureka/
+  instance:
+    ip-address: ${local-ip}
+    instance-id: ${local-ip}:${server.port}
+    prefer-ip-address: true
+    status-page-url: http://${local-ip}:${server.port}/swagger-ui.html
