@@ -2,11 +2,14 @@ package com.narc.tencent.service.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.narc.tencent.service.alimama.service.AlimamaService;
 import com.narc.tencent.service.wechat.entity.message.TextMessage;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.HttpUtils;
 import com.narc.tencent.utils.WechatMessageUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,9 @@ public class WeChatServiceImpl implements WeChatService {
 
     @Value("${alibabaServer.url}")
     private String apiUrl;
+
+    @Autowired
+    private AlimamaService alimamaService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -54,16 +60,16 @@ public class WeChatServiceImpl implements WeChatService {
         return responseMessage;
     }
 
-    private String getTKL(String param) {
+    private String getTKL(String originalWord) {
         JSONObject paramObject = new JSONObject();
-        paramObject.put("originalWord", param);
+        paramObject.put("originalWord", originalWord);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("param", paramObject);
         JSONObject res = null;
         try {
-            res = HttpUtils.httpGet(apiUrl, jsonObject);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            res = alimamaService.tranTkl(paramObject.toJSONString());
+        } catch (Exception e) {
+            log.error("", e);
         }
         log.info(res.toJSONString());
         return res.getString("tranShareWord");
