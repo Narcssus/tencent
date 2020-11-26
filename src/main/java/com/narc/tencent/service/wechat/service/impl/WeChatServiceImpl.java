@@ -105,7 +105,7 @@ public class WeChatServiceImpl implements WeChatService {
                 //显示当前模式
                 return returnTextMessage(textMessage, "当前模式：" + userInfo.getPattern());
             }
-            if (allPermissionIds.contains("SHOW_ALL_COMMANDS") && "显示所有模式".equals(content)) {
+            if (allPermissionIds.contains("SHOW_ALL_COMMANDS") && "显示所有指令".equals(content)) {
                 //显示所有模式
                 StringBuilder sb = new StringBuilder();
                 sb.append("所有指令如下：").append("\r\n");
@@ -118,7 +118,7 @@ public class WeChatServiceImpl implements WeChatService {
                 return returnTextMessage(textMessage, sb.toString());
             }
 
-            if ("TKL".equals(nowPattern)) {
+            if ("淘口令".equals(nowPattern)) {
                 rspContent = tranTkl(content);
                 return returnTextMessage(textMessage, rspContent);
             }
@@ -145,7 +145,7 @@ public class WeChatServiceImpl implements WeChatService {
         userInfo.setCreatedId("SYSTEM");
         userInfo.setModifiedId("SYSTEM");
         userInfo.setOpenId(openId);
-        userInfo.setPattern("TKL");
+        userInfo.setPattern("淘口令");
         //初始化用户-角色
         WxtUserRole userRole = new WxtUserRole();
         userRole.setId(UuidUtils.getUUID());
