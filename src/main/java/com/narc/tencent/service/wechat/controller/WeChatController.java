@@ -1,5 +1,8 @@
 package com.narc.tencent.service.wechat.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
+import com.narc.tencent.service.wechat.entity.CftPermission;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * @author : Narcssus

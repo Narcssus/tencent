@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.narc.tencent.service.wechat.dao.mapper.WxtUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtUserInfo">
+    <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="PATTERN" jdbcType="VARCHAR" property="pattern" />
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
+    <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
+    <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
+    <result column="MODIFIED_ID" jdbcType="VARCHAR" property="modifiedId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    USER_ID, OPEN_ID, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
+    MODIFIED_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WXT_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WXT_USER_INFO
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WXT_USER_INFO
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfoExample">
+    delete from WXT_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
+    insert into WXT_USER_INFO (USER_ID, OPEN_ID, REMARK, 
+      PATTERN, CREATED_DATETIME, CREATED_ID, 
+      MODIFIED_DATETIME, MODIFIED_ID)
+    values (#{userId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{pattern,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, 
+      #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
+    insert into WXT_USER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="openId != null">
+        OPEN_ID,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="pattern != null">
+        PATTERN,
+      </if>
+      <if test="createdDatetime != null">
+        CREATED_DATETIME,
+      </if>
+      <if test="createdId != null">
+        CREATED_ID,
+      </if>
+      <if test="modifiedDatetime != null">
+        MODIFIED_DATETIME,
+      </if>
+      <if test="modifiedId != null">
+        MODIFIED_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="pattern != null">
+        #{pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null">
+        #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdId != null">
+        #{createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDatetime != null">
+        #{modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedId != null">
+        #{modifiedId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfoExample" resultType="java.lang.Long">
+    select count(*) from WXT_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WXT_USER_INFO
+    <set>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openId != null">
+        OPEN_ID = #{record.openId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pattern != null">
+        PATTERN = #{record.pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdDatetime != null">
+        CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdId != null">
+        CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDatetime != null">
+        MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedId != null">
+        MODIFIED_ID = #{record.modifiedId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WXT_USER_INFO
+    set USER_ID = #{record.userId,jdbcType=VARCHAR},
+      OPEN_ID = #{record.openId,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      PATTERN = #{record.pattern,jdbcType=VARCHAR},
+      CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
+      MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
+      MODIFIED_ID = #{record.modifiedId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
+    update WXT_USER_INFO
+    <set>
+      <if test="openId != null">
+        OPEN_ID = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="pattern != null">
+        PATTERN = #{pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null">
+        CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdId != null">
+        CREATED_ID = #{createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDatetime != null">
+        MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedId != null">
+        MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
+    update WXT_USER_INFO
+    set OPEN_ID = #{openId,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      PATTERN = #{pattern,jdbcType=VARCHAR},
+      CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
+      CREATED_ID = #{createdId,jdbcType=VARCHAR},
+      MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
+      MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <sql id="Batch_Insert_Column_List">
+    #{item.userId}, #{item.openId}, #{item.remark}, #{item.pattern}, #{item.createdDatetime}, 
+    #{item.createdId}, #{item.modifiedDatetime}, #{item.modifiedId}
+  </sql>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into WXT_USER_INFO(
+    <include refid="Base_Column_List" />
+    ) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      <include refid="Batch_Insert_Column_List" />
+      )
+    </foreach>
+  </insert>
+</mapper>
