@@ -162,10 +162,10 @@ public class WeChatServiceImpl implements WeChatService {
     private String tranTkl(String originalWord) {
         JSONObject paramObject = new JSONObject();
         paramObject.put("originalWord", originalWord);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("param", paramObject);
-        JSONObject res = null;
+        paramObject.put("requestId", UuidUtils.getUUID());
+        JSONObject res = new JSONObject();
         try {
+            log.info("调用alimamaService，请求：{}", paramObject.toJSONString());
             res = alimamaService.tranTkl(paramObject.toJSONString());
         } catch (Exception e) {
             log.error("", e);

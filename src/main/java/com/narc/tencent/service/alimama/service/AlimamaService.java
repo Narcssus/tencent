@@ -1,6 +1,7 @@
 package com.narc.tencent.service.alimama.service;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,12 @@ public interface AlimamaService {
 
 
     @Component
+    @Slf4j
     class DefaultFallbackImpl implements AlimamaService {
 
         @Override
         public JSONObject tranTkl(String param) {
+            log.info("请求：{}，降级处理", param);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tranShareWord", "目前服务不可用，请稍后再试");
             return jsonObject;
