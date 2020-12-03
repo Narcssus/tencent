@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.narc.tencent.service.alimama.service.AlimamaService;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
+import com.narc.tencent.service.wechat.dao.service.WxtMessageLogDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtUserRoleDaoService;
 import com.narc.tencent.service.wechat.entity.CftPermission;
+import com.narc.tencent.service.wechat.entity.WxtMessageLog;
 import com.narc.tencent.service.wechat.entity.WxtUserInfo;
 import com.narc.tencent.service.wechat.entity.WxtUserRole;
 import com.narc.tencent.service.wechat.entity.message.TextMessage;
@@ -49,28 +51,24 @@ public class WeChatServiceImpl implements WeChatService {
     private WxtUserRoleDaoService wxtUserRoleDaoService;
     @Autowired
     private CftPermissionDaoService cftPermissionDaoService;
+    @Autowired
+    private WxtMessageLogDaoService wxtMessageLogDaoService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
-        log.info(JSON.toJSONString(map));
-        // 发送方帐号（一个OpenID）
-        String fromUserName = map.get("FromUserName");
-        // 开发者微信号
-        String toUserName = map.get("ToUserName");
-        // 消息类型
-        String msgType = map.get("MsgType");
-        // 默认回复一个"success"
-        String responseMessage = "success";
-        String content = map.get("Content");
+        String jsonStr = JSON.toJSONString(map);
+        log.info("收到微信公众号请求:{}", jsonStr);
+        WxtMessageLog msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
+
+        String fromUserName = msgLog.getFromUserName();
+        String toUserName = msgLog.getToUserName();
+        String msgType = msgLog.getMsgType();
+        String content = msgLog.getContent();
         log.info("收到用户{}消息：{}", fromUserName, content);
         if (StringUtils.isBlank(content)) {
             return "";
         }
-        TextMessage textMessage = new TextMessage();
-        textMessage.setToUserName(fromUserName);
-        textMessage.setFromUserName(toUserName);
-
         //获取用户信息
         WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(fromUserName);
         if (userInfo == null) {
@@ -82,17 +80,21 @@ public class WeChatServiceImpl implements WeChatService {
         //获取用户所有的权限
         List<String> allPermissionIds = allPermissions.stream()
                 .map(CftPermission::getPermissionId).collect(Collectors.toList());
-        //用户的所有口令
-        List<String> allCommands = allPermissions.stream()
-                .map(CftPermission::getCommand).collect(Collectors.toList());
 
+
+        TextMessage textMessage = new TextMessage();
+        textMessage.setToUserName(fromUserName);
+        textMessage.setFromUserName(toUserName);
+        String rspContent = "请输入正确的指令";
         // 对消息进行处理
         if (WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {
-            String rspContent = "请输入正确的指令";
             //判断类型
             if (allPermissionIds.contains("CHANGE_PATTERN") && content.startsWith("切换到")) {
                 //切换当前模式
                 String nextPattern = content.substring(3);
+                //用户的所有口令
+                List<String> allCommands = allPermissions.stream()
+                        .map(CftPermission::getCommand).collect(Collectors.toList());
                 if (allCommands.contains(nextPattern)) {
                     //更新用户模式
                     userInfo.setPattern(nextPattern);
@@ -115,16 +117,18 @@ public class WeChatServiceImpl implements WeChatService {
                             .append(permission.getCommandDesc())
                             .append("\r\n");
                 }
-                return returnTextMessage(textMessage, sb.toString());
+                rspContent = sb.toString();
+                return returnTextMessage(textMessage, rspContent);
             }
 
             if ("淘口令".equals(nowPattern)) {
                 rspContent = tranTkl(content);
-                return returnTextMessage(textMessage, rspContent);
             }
 
         }
-        return returnTextMessage(textMessage, "请输入正确指令");
+        msgLog.setRtMsgContent(rspContent);
+        wxtMessageLogDaoService.insertOne(msgLog);
+        return returnTextMessage(textMessage, rspContent);
     }
 
 

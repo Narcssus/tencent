@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.narc.tencent.service.wechat.dao.mapper.WxtMessageLogMapper">
+  <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="TO_USER_NAME" jdbcType="VARCHAR" property="toUserName" />
+    <result column="FROM_USER_NAME" jdbcType="VARCHAR" property="fromUserName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="MSG_TYPE" jdbcType="VARCHAR" property="msgType" />
+    <result column="MSG_ID" jdbcType="VARCHAR" property="msgId" />
+    <result column="EVENT" jdbcType="VARCHAR" property="event" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="PIC_URL" jdbcType="VARCHAR" property="picUrl" />
+    <result column="MEDIA_ID" jdbcType="VARCHAR" property="mediaId" />
+    <result column="FORMAT" jdbcType="VARCHAR" property="format" />
+    <result column="RECOGNITION" jdbcType="VARCHAR" property="recognition" />
+    <result column="THUMB_MEDIA_ID" jdbcType="VARCHAR" property="thumbMediaId" />
+    <result column="RT_MSG_TYPE" jdbcType="VARCHAR" property="rtMsgType" />
+    <result column="RT_MSG_CONTENT" jdbcType="VARCHAR" property="rtMsgContent" />
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
+    <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
+    <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
+    <result column="MODIFIED_ID" jdbcType="VARCHAR" property="modifiedId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, TO_USER_NAME, FROM_USER_NAME, CREATE_TIME, MSG_TYPE, MSG_ID, EVENT, CONTENT, 
+    PIC_URL, MEDIA_ID, FORMAT, RECOGNITION, THUMB_MEDIA_ID, RT_MSG_TYPE, RT_MSG_CONTENT, 
+    CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WXT_MESSAGE_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WXT_MESSAGE_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WXT_MESSAGE_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLogExample">
+    delete from WXT_MESSAGE_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    insert into WXT_MESSAGE_LOG (ID, TO_USER_NAME, FROM_USER_NAME, 
+      CREATE_TIME, MSG_TYPE, MSG_ID, 
+      EVENT, CONTENT, PIC_URL, 
+      MEDIA_ID, FORMAT, RECOGNITION, 
+      THUMB_MEDIA_ID, RT_MSG_TYPE, RT_MSG_CONTENT, 
+      CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
+      MODIFIED_ID)
+    values (#{id,jdbcType=VARCHAR}, #{toUserName,jdbcType=VARCHAR}, #{fromUserName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{msgType,jdbcType=VARCHAR}, #{msgId,jdbcType=VARCHAR}, 
+      #{event,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, 
+      #{mediaId,jdbcType=VARCHAR}, #{format,jdbcType=VARCHAR}, #{recognition,jdbcType=VARCHAR}, 
+      #{thumbMediaId,jdbcType=VARCHAR}, #{rtMsgType,jdbcType=VARCHAR}, #{rtMsgContent,jdbcType=VARCHAR}, 
+      #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, 
+      #{modifiedId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    insert into WXT_MESSAGE_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="toUserName != null">
+        TO_USER_NAME,
+      </if>
+      <if test="fromUserName != null">
+        FROM_USER_NAME,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="msgType != null">
+        MSG_TYPE,
+      </if>
+      <if test="msgId != null">
+        MSG_ID,
+      </if>
+      <if test="event != null">
+        EVENT,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="picUrl != null">
+        PIC_URL,
+      </if>
+      <if test="mediaId != null">
+        MEDIA_ID,
+      </if>
+      <if test="format != null">
+        FORMAT,
+      </if>
+      <if test="recognition != null">
+        RECOGNITION,
+      </if>
+      <if test="thumbMediaId != null">
+        THUMB_MEDIA_ID,
+      </if>
+      <if test="rtMsgType != null">
+        RT_MSG_TYPE,
+      </if>
+      <if test="rtMsgContent != null">
+        RT_MSG_CONTENT,
+      </if>
+      <if test="createdDatetime != null">
+        CREATED_DATETIME,
+      </if>
+      <if test="createdId != null">
+        CREATED_ID,
+      </if>
+      <if test="modifiedDatetime != null">
+        MODIFIED_DATETIME,
+      </if>
+      <if test="modifiedId != null">
+        MODIFIED_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserName != null">
+        #{toUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUserName != null">
+        #{fromUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgType != null">
+        #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="msgId != null">
+        #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="event != null">
+        #{event,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="recognition != null">
+        #{recognition,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbMediaId != null">
+        #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="rtMsgType != null">
+        #{rtMsgType,jdbcType=VARCHAR},
+      </if>
+      <if test="rtMsgContent != null">
+        #{rtMsgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null">
+        #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdId != null">
+        #{createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDatetime != null">
+        #{modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedId != null">
+        #{modifiedId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLogExample" resultType="java.lang.Long">
+    select count(*) from WXT_MESSAGE_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WXT_MESSAGE_LOG
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toUserName != null">
+        TO_USER_NAME = #{record.toUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromUserName != null">
+        FROM_USER_NAME = #{record.fromUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.msgType != null">
+        MSG_TYPE = #{record.msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgId != null">
+        MSG_ID = #{record.msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.event != null">
+        EVENT = #{record.event,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picUrl != null">
+        PIC_URL = #{record.picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mediaId != null">
+        MEDIA_ID = #{record.mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.format != null">
+        FORMAT = #{record.format,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recognition != null">
+        RECOGNITION = #{record.recognition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thumbMediaId != null">
+        THUMB_MEDIA_ID = #{record.thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rtMsgType != null">
+        RT_MSG_TYPE = #{record.rtMsgType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rtMsgContent != null">
+        RT_MSG_CONTENT = #{record.rtMsgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdDatetime != null">
+        CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdId != null">
+        CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDatetime != null">
+        MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedId != null">
+        MODIFIED_ID = #{record.modifiedId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WXT_MESSAGE_LOG
+    set ID = #{record.id,jdbcType=VARCHAR},
+      TO_USER_NAME = #{record.toUserName,jdbcType=VARCHAR},
+      FROM_USER_NAME = #{record.fromUserName,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      MSG_TYPE = #{record.msgType,jdbcType=VARCHAR},
+      MSG_ID = #{record.msgId,jdbcType=VARCHAR},
+      EVENT = #{record.event,jdbcType=VARCHAR},
+      CONTENT = #{record.content,jdbcType=VARCHAR},
+      PIC_URL = #{record.picUrl,jdbcType=VARCHAR},
+      MEDIA_ID = #{record.mediaId,jdbcType=VARCHAR},
+      FORMAT = #{record.format,jdbcType=VARCHAR},
+      RECOGNITION = #{record.recognition,jdbcType=VARCHAR},
+      THUMB_MEDIA_ID = #{record.thumbMediaId,jdbcType=VARCHAR},
+      RT_MSG_TYPE = #{record.rtMsgType,jdbcType=VARCHAR},
+      RT_MSG_CONTENT = #{record.rtMsgContent,jdbcType=VARCHAR},
+      CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
+      MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
+      MODIFIED_ID = #{record.modifiedId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    update WXT_MESSAGE_LOG
+    <set>
+      <if test="toUserName != null">
+        TO_USER_NAME = #{toUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUserName != null">
+        FROM_USER_NAME = #{fromUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msgType != null">
+        MSG_TYPE = #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="msgId != null">
+        MSG_ID = #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="event != null">
+        EVENT = #{event,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        MEDIA_ID = #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        FORMAT = #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="recognition != null">
+        RECOGNITION = #{recognition,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbMediaId != null">
+        THUMB_MEDIA_ID = #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="rtMsgType != null">
+        RT_MSG_TYPE = #{rtMsgType,jdbcType=VARCHAR},
+      </if>
+      <if test="rtMsgContent != null">
+        RT_MSG_CONTENT = #{rtMsgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null">
+        CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdId != null">
+        CREATED_ID = #{createdId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDatetime != null">
+        MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedId != null">
+        MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    update WXT_MESSAGE_LOG
+    set TO_USER_NAME = #{toUserName,jdbcType=VARCHAR},
+      FROM_USER_NAME = #{fromUserName,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      MSG_TYPE = #{msgType,jdbcType=VARCHAR},
+      MSG_ID = #{msgId,jdbcType=VARCHAR},
+      EVENT = #{event,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      MEDIA_ID = #{mediaId,jdbcType=VARCHAR},
+      FORMAT = #{format,jdbcType=VARCHAR},
+      RECOGNITION = #{recognition,jdbcType=VARCHAR},
+      THUMB_MEDIA_ID = #{thumbMediaId,jdbcType=VARCHAR},
+      RT_MSG_TYPE = #{rtMsgType,jdbcType=VARCHAR},
+      RT_MSG_CONTENT = #{rtMsgContent,jdbcType=VARCHAR},
+      CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
+      CREATED_ID = #{createdId,jdbcType=VARCHAR},
+      MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
+      MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <sql id="Batch_Insert_Column_List">
+    #{item.id}, #{item.toUserName}, #{item.fromUserName}, #{item.createTime}, #{item.msgType}, 
+    #{item.msgId}, #{item.event}, #{item.content}, #{item.picUrl}, #{item.mediaId}, #{item.format}, 
+    #{item.recognition}, #{item.thumbMediaId}, #{item.rtMsgType}, #{item.rtMsgContent}, 
+    #{item.createdDatetime}, #{item.createdId}, #{item.modifiedDatetime}, #{item.modifiedId}
+  </sql>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into WXT_MESSAGE_LOG(
+    <include refid="Base_Column_List" />
+    ) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      <include refid="Batch_Insert_Column_List" />
+      )
+    </foreach>
+  </insert>
+</mapper>

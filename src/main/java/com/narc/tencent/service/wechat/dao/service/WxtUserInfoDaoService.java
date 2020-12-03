@@ -10,6 +10,7 @@ import com.narc.tencent.service.wechat.entity.WxtUserInfoExample;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,10 +39,13 @@ public class WxtUserInfoDaoService {
     }
 
     public void insert(WxtUserInfo wxtUserInfo) {
+        wxtUserInfo.setCreatedDatetime(new Date());
+        wxtUserInfo.setModifiedDatetime(new Date());
         wxtUserInfoMapper.insert(wxtUserInfo);
     }
 
     public void updateByPrimaryKeySelective(WxtUserInfo wxtUserInfo){
+        wxtUserInfo.setModifiedDatetime(new Date());
         wxtUserInfoMapper.updateByPrimaryKeySelective(wxtUserInfo);
     }
 

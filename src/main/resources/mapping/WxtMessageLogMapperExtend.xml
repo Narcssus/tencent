@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.narc.tencent.service.wechat.dao.mapper.WxtMessageLogMapperExtend">
+  <!--
+  该文件是由NarcMybatisGenerator自动生成的文件
+  建议将所有自定义的SQL保存在该文件中
+  请注意不要删除此文件的注释内容
+  -->
+  <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtMessageLog">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="TO_USER_NAME" jdbcType="VARCHAR" property="toUserName" />
+    <result column="FROM_USER_NAME" jdbcType="VARCHAR" property="fromUserName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="MSG_TYPE" jdbcType="VARCHAR" property="msgType" />
+    <result column="MSG_ID" jdbcType="VARCHAR" property="msgId" />
+    <result column="EVENT" jdbcType="VARCHAR" property="event" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="PIC_URL" jdbcType="VARCHAR" property="picUrl" />
+    <result column="MEDIA_ID" jdbcType="VARCHAR" property="mediaId" />
+    <result column="FORMAT" jdbcType="VARCHAR" property="format" />
+    <result column="RECOGNITION" jdbcType="VARCHAR" property="recognition" />
+    <result column="THUMB_MEDIA_ID" jdbcType="VARCHAR" property="thumbMediaId" />
+    <result column="RT_MSG_TYPE" jdbcType="VARCHAR" property="rtMsgType" />
+    <result column="RT_MSG_CONTENT" jdbcType="VARCHAR" property="rtMsgContent" />
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
+    <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
+    <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
+    <result column="MODIFIED_ID" jdbcType="VARCHAR" property="modifiedId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, TO_USER_NAME, FROM_USER_NAME, CREATE_TIME, MSG_TYPE, MSG_ID, EVENT, CONTENT, 
+    PIC_URL, MEDIA_ID, FORMAT, RECOGNITION, THUMB_MEDIA_ID, RT_MSG_TYPE, RT_MSG_CONTENT, 
+    CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
+  </sql>
+  <!-- 该注释以下的内容不会被覆盖，请不要删除或修改此条注释内容-->
+</mapper>
