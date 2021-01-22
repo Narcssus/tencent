@@ -30,6 +30,7 @@
 
     <select id="selectAllByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
+    distinct
       <include refid="d_Base_Column_List" />
       FROM
     WXT_USER_ROLE a,

@@ -13,18 +13,13 @@ import com.narc.tencent.service.wechat.entity.WxtUserInfo;
 import com.narc.tencent.service.wechat.entity.WxtUserRole;
 import com.narc.tencent.service.wechat.entity.message.TextMessage;
 import com.narc.tencent.service.wechat.service.WeChatService;
-import com.narc.tencent.utils.HttpUtils;
 import com.narc.tencent.utils.UuidUtils;
 import com.narc.tencent.utils.WechatMessageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +36,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WeChatServiceImpl implements WeChatService {
 
-    @Value("${alibabaServer.url}")
-    private String apiUrl;
+    private final AlimamaService alimamaService;
+    private final WxtUserInfoDaoService wxtUserInfoDaoService;
+    private final WxtUserRoleDaoService wxtUserRoleDaoService;
+    private final CftPermissionDaoService cftPermissionDaoService;
+    private final WxtMessageLogDaoService wxtMessageLogDaoService;
 
-    @Autowired
-    private AlimamaService alimamaService;
-
-    @Autowired
-    private WxtUserInfoDaoService wxtUserInfoDaoService;
-    @Autowired
-    private WxtUserRoleDaoService wxtUserRoleDaoService;
-    @Autowired
-    private CftPermissionDaoService cftPermissionDaoService;
-    @Autowired
-    private WxtMessageLogDaoService wxtMessageLogDaoService;
+    public WeChatServiceImpl(AlimamaService alimamaService, WxtUserInfoDaoService wxtUserInfoDaoService, WxtUserRoleDaoService wxtUserRoleDaoService, CftPermissionDaoService cftPermissionDaoService, WxtMessageLogDaoService wxtMessageLogDaoService) {
+        this.alimamaService = alimamaService;
+        this.wxtUserInfoDaoService = wxtUserInfoDaoService;
+        this.wxtUserRoleDaoService = wxtUserRoleDaoService;
+        this.cftPermissionDaoService = cftPermissionDaoService;
+        this.wxtMessageLogDaoService = wxtMessageLogDaoService;
+    }
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -175,7 +169,9 @@ public class WeChatServiceImpl implements WeChatService {
         //判断是否是模式指令
         switch (nowPattern.getPermissionId()) {
             case "TKL":
-                return tranTkl(content);
+                return tranTkl(content,"NORMAL");
+            case "TKL_VIP":
+                return tranTkl(content,"VIP");
             case "CHAT":
                 return "聊天模式暂未开放，敬请期待";
             case "CALC":
@@ -222,6 +218,7 @@ public class WeChatServiceImpl implements WeChatService {
     private String getHelp(CftPermission nowPattern) {
         switch (nowPattern.getPermissionId()) {
             case "TKL":
+            case "TKL_VIP":
                 return "淘口令使用说明";
             case "CHAT":
                 return "聊天模式使用说明";
@@ -232,9 +229,10 @@ public class WeChatServiceImpl implements WeChatService {
         }
     }
 
-    private String tranTkl(String originalWord) {
+    private String tranTkl(String originalWord,String type) {
         JSONObject paramObject = new JSONObject();
         paramObject.put("originalWord", originalWord);
+        paramObject.put("type", type);
         paramObject.put("requestId", UuidUtils.getUUID());
         JSONObject res = new JSONObject();
         try {
