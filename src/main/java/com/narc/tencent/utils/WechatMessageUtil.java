@@ -28,7 +28,7 @@ public class WechatMessageUtil {
     /**
      * 图片消息
      */
-    public static final String MESSAtGE_IMAGE = "image";
+    public static final String MESSAGE_IMAGE = "image";
     /**
      * 图文消息
      */

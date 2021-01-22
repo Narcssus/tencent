@@ -3,15 +3,18 @@ package com.narc.tencent.service.wechat.dao.service;
 import com.narc.tencent.service.wechat.dao.mapper.CftPermissionMapper;
 import com.narc.tencent.service.wechat.dao.mapper.CftPermissionMapperExtend;
 import com.narc.tencent.service.wechat.entity.CftPermission;
+
 import javax.annotation.Resource;
 
 import com.narc.tencent.service.wechat.entity.CftPermissionExample;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 /**
  * DaoService
+ *
  * @author NarcMybatisGenerator
  * @date 2020-11-26
  */
@@ -28,8 +31,15 @@ public class CftPermissionDaoService {
         return cftPermissionMapperExtend.selectAllByUserId(userId);
     }
 
-
-
+    public CftPermission selectByPermissionId(String permissionId) {
+        CftPermissionExample example = new CftPermissionExample();
+        example.createCriteria().andPermissionIdEqualTo(permissionId);
+        List<CftPermission> list = cftPermissionMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
 
 
 }

@@ -25,9 +25,11 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -56,83 +58,138 @@ public class WeChatServiceImpl implements WeChatService {
 
     @Override
     public String processRequest(HttpServletRequest request) {
-        Map<String, String> map = WechatMessageUtil.xmlToMap(request);
-        String jsonStr = JSON.toJSONString(map);
-        log.info("收到微信公众号请求:{}", jsonStr);
-        WxtMessageLog msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
+        String res = "";
+        WxtMessageLog msgLog = new WxtMessageLog();
+        try {
+            Map<String, String> map = WechatMessageUtil.xmlToMap(request);
+            String jsonStr = JSON.toJSONString(map);
+            log.info("收到微信公众号请求:{}", jsonStr);
+            msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
+            String fromUserName = msgLog.getFromUserName();
+            String toUserName = msgLog.getToUserName();
+            String content = msgLog.getContent();
+            log.info("收到用户{}消息：{}", fromUserName, content);
+            if (StringUtils.isBlank(content)) {
+                return "";
+            }
+            //获取用户信息
+            WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(fromUserName);
+            if (userInfo == null) {
+                //新用户新增
+                userInfo = initNewUser(fromUserName);
+            }
+            String rspContent = "暂不支持";
+            switch (msgLog.getMsgType()) {
+                case WechatMessageUtil.MESSAGE_TEXT:
+                    rspContent = dealText(msgLog.getContent(), userInfo);
+                    break;
+                case WechatMessageUtil.MESSAGE_IMAGE:
+                    rspContent = "暂不支持图片处理";
+                    break;
+                default:
+                    break;
+            }
+            res = returnTextMessage(rspContent, fromUserName, toUserName);
+            msgLog.setRtMsgContent(rspContent);
+        } catch (Exception e) {
+            log.error("", e);
+        } finally {
+            msgLog.setId(UUID.randomUUID().toString());
+            msgLog.setCreatedId("SYSTEM");
+            msgLog.setModifiedId("SYSTEM");
+            msgLog.setCreatedDatetime(new Date());
+            msgLog.setModifiedDatetime(new Date());
+            wxtMessageLogDaoService.insertOne(msgLog);
+        }
+        return res;
+    }
 
-        String fromUserName = msgLog.getFromUserName();
-        String toUserName = msgLog.getToUserName();
-        String msgType = msgLog.getMsgType();
-        String content = msgLog.getContent();
-        log.info("收到用户{}消息：{}", fromUserName, content);
-        if (StringUtils.isBlank(content)) {
-            return "";
-        }
-        //获取用户信息
-        WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(fromUserName);
-        if (userInfo == null) {
-            //新用户新增
-            userInfo = initNewUser(fromUserName);
-        }
-        String nowPattern = userInfo.getPattern();
-        List<CftPermission> allPermissions = cftPermissionDaoService.selectAllByUserId(userInfo.getUserId());
+    @Override
+    public String dealText(String content, WxtUserInfo userInfo) {
         //获取用户所有的权限
-        List<String> allPermissionIds = allPermissions.stream()
-                .map(CftPermission::getPermissionId).collect(Collectors.toList());
+        List<CftPermission> allPermissions = cftPermissionDaoService.selectAllByUserId(userInfo.getUserId());
+        //判断是否是BASE指令
+        List<CftPermission> basePermissionIds = allPermissions.stream()
+                .filter(o -> "BASE".equals(o.getType()))
+                .collect(Collectors.toList());
+        List<CftPermission> patternCommands = allPermissions.stream()
+                .filter(o -> "PATTERN".equals(o.getType()))
+                .collect(Collectors.toList());
+        CftPermission nowPattern = cftPermissionDaoService.selectByPermissionId(userInfo.getPattern());
 
+        for (CftPermission permission : basePermissionIds) {
+            String pattern = permission.getCommand();
+            boolean isMatch = Pattern.matches(pattern, content);
+            if (!isMatch) {
+                continue;
+            }
+            switch (permission.getPermissionId()) {
+                case "CHANGE_PATTERN":
+                    //切换当前模式
+                    String nextPattern = content.substring(3);
+                    //用户的所有口令
 
-        TextMessage textMessage = new TextMessage();
-        textMessage.setToUserName(fromUserName);
-        textMessage.setFromUserName(toUserName);
-        String rspContent = "请输入正确的指令";
-        // 对消息进行处理
-        if (WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {
-            //判断类型
-            if (allPermissionIds.contains("CHANGE_PATTERN") && content.startsWith("切换到")) {
-                //切换当前模式
-                String nextPattern = content.substring(3);
-                //用户的所有口令
-                List<String> allCommands = allPermissions.stream()
-                        .map(CftPermission::getCommand).collect(Collectors.toList());
-                if (allCommands.contains(nextPattern)) {
-                    //更新用户模式
-                    userInfo.setPattern(nextPattern);
-                    wxtUserInfoDaoService.updateByPrimaryKeySelective(userInfo);
-                }
-                return returnTextMessage(textMessage, "切换成功，当前模式：" + nextPattern);
-            }
-            if (allPermissionIds.contains("SHOW_PATTERN") &&
-                    ("显示当前模式".equals(content) || "当前模式".equals(content))) {
-                //显示当前模式
-                return returnTextMessage(textMessage, "当前模式：" + userInfo.getPattern());
-            }
-            if (allPermissionIds.contains("SHOW_ALL_COMMANDS") && "显示所有指令".equals(content)) {
-                //显示所有模式
-                StringBuilder sb = new StringBuilder();
-                sb.append("所有指令如下：").append("\r\n");
-                for (CftPermission permission : allPermissions) {
-                    sb.append(permission.getCommand())
+                    for (CftPermission cftPermission : patternCommands) {
+                        if (nextPattern.equals(cftPermission.getPermissionName())) {
+                            //更新用户模式
+                            userInfo.setPattern(cftPermission.getPermissionId());
+                            wxtUserInfoDaoService.updateByPrimaryKeySelective(userInfo);
+                            return "切换成功，当前模式：" + cftPermission.getPermissionName();
+                        }
+                    }
+                    return "切换失败，当前模式：" + nowPattern.getPermissionName();
+                case "SHOW_PATTERN":
+                    return "当前模式：" + nowPattern.getPermissionName();
+                case "SHOW_ALL_COMMANDS":
+                    //显示所有指令
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("所有指令如下：").append("\r\n");
+                    for (CftPermission p : basePermissionIds) {
+                        sb.append(p.getPermissionName())
+                                .append("--")
+                                .append(p.getCommandDesc())
+                                .append("\r\n");
+                    }
+                    sb.append(nowPattern.getPermissionName())
                             .append("--")
-                            .append(permission.getCommandDesc())
-                            .append("\r\n");
-                }
-                rspContent = sb.toString();
-                return returnTextMessage(textMessage, rspContent);
+                            .append(nowPattern.getCommandDesc());
+                    return sb.toString();
+                case "SHOW_ALL_PATTERNS":
+                    //显示所有模式
+                    sb = new StringBuilder();
+                    sb.append("所有模式如下：").append("\r\n");
+                    for (CftPermission p : patternCommands) {
+                        sb.append(p.getPermissionName())
+                                .append("--")
+                                .append(p.getCommandDesc())
+                                .append("\r\n");
+                    }
+                    return sb.toString();
+                case "SHOW_HELP":
+                    //显示当前模式的使用说明
+                    return getHelp(nowPattern);
+                default:
+                    return "请输入正确的指令";
             }
-
-            if ("淘口令".equals(nowPattern)) {
-                rspContent = tranTkl(content);
-            }
-
         }
-        msgLog.setRtMsgContent(rspContent);
-        wxtMessageLogDaoService.insertOne(msgLog);
-        return returnTextMessage(textMessage, rspContent);
+        //判断是否是模式指令
+        switch (nowPattern.getPermissionId()) {
+            case "TKL":
+                return tranTkl(content);
+            case "CHAT":
+                return "聊天模式暂未开放，敬请期待";
+            case "CALC":
+                return "计算模式暂未开放，敬请期待";
+            default:
+                return "请输入正确的指令";
+        }
     }
 
 
-    private String returnTextMessage(TextMessage textMessage, String rspContent) {
+    private String returnTextMessage(String rspContent, String fromUserName, String toUserName) {
+        TextMessage textMessage = new TextMessage();
+        textMessage.setToUserName(fromUserName);
+        textMessage.setFromUserName(toUserName);
         textMessage.setMsgType(WechatMessageUtil.MESSAGE_TEXT);
         textMessage.setCreateTime(System.currentTimeMillis());
         textMessage.setContent(rspContent);
@@ -162,6 +219,18 @@ public class WeChatServiceImpl implements WeChatService {
         return userInfo;
     }
 
+    private String getHelp(CftPermission nowPattern) {
+        switch (nowPattern.getPermissionId()) {
+            case "TKL":
+                return "淘口令使用说明";
+            case "CHAT":
+                return "聊天模式使用说明";
+            case "CALC":
+                return "计算模式使用说明";
+            default:
+                return "当前模式没有相关使用说明";
+        }
+    }
 
     private String tranTkl(String originalWord) {
         JSONObject paramObject = new JSONObject();

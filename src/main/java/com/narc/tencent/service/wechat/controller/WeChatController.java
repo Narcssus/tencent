@@ -2,7 +2,10 @@ package com.narc.tencent.service.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
+import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
 import com.narc.tencent.service.wechat.entity.CftPermission;
+import com.narc.tencent.service.wechat.entity.WxtMessageLog;
+import com.narc.tencent.service.wechat.entity.WxtUserInfo;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;
@@ -42,7 +45,7 @@ public class WeChatController {
      * @param nonce
      * @param echostr
      */
-    @RequestMapping(value = "/wechat", method = RequestMethod.GET)
+    @GetMapping(value = "/wechat")
     public void wechatService(PrintWriter out, HttpServletResponse response,
                               @RequestParam(value = "signature", required = false) String signature, @RequestParam String timestamp,
                               @RequestParam String nonce, @RequestParam String echostr) {
@@ -55,26 +58,38 @@ public class WeChatController {
 
     /**
      * 接收来自微信发来的消息
-     *
-     * @param request
-     * @param response
      */
     @ResponseBody
-    @RequestMapping(value = "/wechat", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+    @PostMapping(value = "/wechat", produces = "application/text;charset=UTF-8")
     public void wechatServicePost(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
-            response.setHeader("content-type","application/text;charset=UTF-8");
-        } catch (UnsupportedEncodingException e) {
+            response.setHeader("content-type", "application/text;charset=UTF-8");
+        } catch (Exception e) {
             log.error("", e);
         }
         String responseMessage = weChatService.processRequest(request);
         try {
             response.getWriter().write(responseMessage);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("", e);
         }
     }
+
+    @Autowired
+    private WxtUserInfoDaoService wxtUserInfoDaoService;
+
+    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
+    public String test(String openId, String content) {
+        try {
+            WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(openId);
+            return weChatService.dealText(content, userInfo);
+        } catch (Exception e) {
+            log.error("", e);
+            return "error";
+        }
+    }
+
 
 }

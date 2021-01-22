@@ -1,5 +1,8 @@
 package com.narc.tencent.service.wechat.service;
 
+import com.narc.tencent.service.wechat.entity.WxtMessageLog;
+import com.narc.tencent.service.wechat.entity.WxtUserInfo;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -10,8 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 public interface WeChatService {
 
     /**
-     *  淘口令转链
+     * 处理请求
+     *
      * @return
      */
-     String processRequest(HttpServletRequest request);
+    String processRequest(HttpServletRequest request);
+
+    String dealText(String content, WxtUserInfo userInfo);
+
 }
