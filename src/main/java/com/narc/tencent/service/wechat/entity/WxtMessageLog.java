@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-消息日志
  * 
  * @author Narc
- * @date 2020-11-30
+ * @date 2021-01-25
  */
 @Data
 public class WxtMessageLog {
@@ -73,7 +73,7 @@ public class WxtMessageLog {
      * PIC_URL
      * 图片链接
      */
-    @Size(max=64)
+    @Size(max=256)
     private String picUrl;
 
     /**
