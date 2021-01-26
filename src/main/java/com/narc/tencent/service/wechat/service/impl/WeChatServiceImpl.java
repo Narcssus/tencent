@@ -169,9 +169,9 @@ public class WeChatServiceImpl implements WeChatService {
         //判断是否是模式指令
         switch (nowPattern.getPermissionId()) {
             case "TKL":
-                return tranTkl(content,"NORMAL");
+                return tranTkl(content, "NORMAL", userInfo.getUserId(), userInfo.getRemark());
             case "TKL_VIP":
-                return tranTkl(content,"VIP");
+                return tranTkl(content, "VIP", userInfo.getUserId(), userInfo.getRemark());
             case "CHAT":
                 return "聊天模式暂未开放，敬请期待";
             case "CALC":
@@ -229,11 +229,13 @@ public class WeChatServiceImpl implements WeChatService {
         }
     }
 
-    private String tranTkl(String originalWord,String type) {
+    private String tranTkl(String originalWord, String type, String senderId, String senderName) {
         JSONObject paramObject = new JSONObject();
         paramObject.put("originalWord", originalWord);
         paramObject.put("type", type);
         paramObject.put("requestId", UuidUtils.getUUID());
+        paramObject.put("senderId", senderId);
+        paramObject.put("senderName", senderName);
         JSONObject res = new JSONObject();
         try {
             log.info("调用alimamaService，请求：{}", paramObject.toJSONString());
