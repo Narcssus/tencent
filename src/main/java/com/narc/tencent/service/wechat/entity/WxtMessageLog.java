@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-消息日志
  * 
  * @author Narc
- * @date 2021-01-25
+ * @date 2021-01-26
  */
 @Data
 public class WxtMessageLog {
@@ -17,9 +17,8 @@ public class WxtMessageLog {
      * ID
      * 主键
      */
-    @Size(max=64)
     @NotNull
-    private String id;
+    private Integer id;
 
     /**
      * TO_USER_NAME

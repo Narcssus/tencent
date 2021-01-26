@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.narc.tencent.service.wechat.dao.mapper.WxtMessageLogMapper">
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtMessageLog">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="TO_USER_NAME" jdbcType="VARCHAR" property="toUserName" />
     <result column="FROM_USER_NAME" jdbcType="VARCHAR" property="fromUserName" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
@@ -99,15 +99,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from WXT_MESSAGE_LOG
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from WXT_MESSAGE_LOG
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLogExample">
     delete from WXT_MESSAGE_LOG
@@ -123,7 +123,7 @@
       THUMB_MEDIA_ID, RT_MSG_TYPE, RT_MSG_CONTENT, 
       CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
       MODIFIED_ID)
-    values (#{id,jdbcType=VARCHAR}, #{toUserName,jdbcType=VARCHAR}, #{fromUserName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{toUserName,jdbcType=VARCHAR}, #{fromUserName,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{msgType,jdbcType=VARCHAR}, #{msgId,jdbcType=VARCHAR}, 
       #{event,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, 
       #{mediaId,jdbcType=VARCHAR}, #{format,jdbcType=VARCHAR}, #{recognition,jdbcType=VARCHAR}, 
@@ -194,7 +194,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="toUserName != null">
         #{toUserName,jdbcType=VARCHAR},
@@ -262,7 +262,7 @@
     update WXT_MESSAGE_LOG
     <set>
       <if test="record.id != null">
-        ID = #{record.id,jdbcType=VARCHAR},
+        ID = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.toUserName != null">
         TO_USER_NAME = #{record.toUserName,jdbcType=VARCHAR},
@@ -325,7 +325,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update WXT_MESSAGE_LOG
-    set ID = #{record.id,jdbcType=VARCHAR},
+    set ID = #{record.id,jdbcType=INTEGER},
       TO_USER_NAME = #{record.toUserName,jdbcType=VARCHAR},
       FROM_USER_NAME = #{record.fromUserName,jdbcType=VARCHAR},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
@@ -406,7 +406,7 @@
         MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.WxtMessageLog">
     update WXT_MESSAGE_LOG
@@ -428,7 +428,7 @@
       CREATED_ID = #{createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
       MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <sql id="Batch_Insert_Column_List">
     #{item.id}, #{item.toUserName}, #{item.fromUserName}, #{item.createTime}, #{item.msgType}, 

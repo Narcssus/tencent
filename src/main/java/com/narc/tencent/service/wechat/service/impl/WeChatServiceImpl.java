@@ -59,6 +59,7 @@ public class WeChatServiceImpl implements WeChatService {
             String jsonStr = JSON.toJSONString(map);
             log.info("收到微信公众号请求:{}", jsonStr);
             msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
+            msgLog.setCreateTime(new Date(Long.parseLong(map.get("CreateTime") + "000")));
             String fromUserName = msgLog.getFromUserName();
             String toUserName = msgLog.getToUserName();
             String content = msgLog.getContent();
@@ -88,11 +89,6 @@ public class WeChatServiceImpl implements WeChatService {
         } catch (Exception e) {
             log.error("", e);
         } finally {
-            msgLog.setId(UUID.randomUUID().toString());
-            msgLog.setCreatedId("SYSTEM");
-            msgLog.setModifiedId("SYSTEM");
-            msgLog.setCreatedDatetime(new Date());
-            msgLog.setModifiedDatetime(new Date());
             wxtMessageLogDaoService.insertOne(msgLog);
         }
         return res;

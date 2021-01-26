@@ -23,7 +23,7 @@ public class WxtMessageLogDaoService {
     private WxtMessageLogMapperExtend wxtMessageLogMapperExtend;
 
     public void insertOne(WxtMessageLog record) {
-        wxtMessageLogMapper.insert(record);
+        wxtMessageLogMapper.insertSelective(record);
     }
 
 

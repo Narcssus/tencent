@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @author NarcMybatisGenerator
- * @date 2021-01-25
+ * @date 2021-01-26
 */
 @Mapper
 @SuppressWarnings("unused")
@@ -17,7 +17,7 @@ public interface WxtMessageLogMapper {
 
     int deleteByExample(WxtMessageLogExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(WxtMessageLog record);
 
@@ -25,7 +25,7 @@ public interface WxtMessageLogMapper {
 
     List<WxtMessageLog> selectByExample(WxtMessageLogExample example);
 
-    WxtMessageLog selectByPrimaryKey(String id);
+    WxtMessageLog selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") WxtMessageLog record, @Param("example") WxtMessageLogExample example);
 

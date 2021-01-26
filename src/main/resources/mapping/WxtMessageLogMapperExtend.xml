@@ -7,7 +7,7 @@
   请注意不要删除此文件的注释内容
   -->
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtMessageLog">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="TO_USER_NAME" jdbcType="VARCHAR" property="toUserName" />
     <result column="FROM_USER_NAME" jdbcType="VARCHAR" property="fromUserName" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
