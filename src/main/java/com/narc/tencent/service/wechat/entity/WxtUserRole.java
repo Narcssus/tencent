@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-用户角色表
  * 
  * @author Narc
- * @date 2020-11-26
+ * @date 2021-01-28
  */
 @Data
 public class WxtUserRole {
@@ -17,9 +17,8 @@ public class WxtUserRole {
      * ID
      * 主键
      */
-    @Size(max=64)
     @NotNull
-    private String id;
+    private Integer id;
 
     /**
      * USER_ID

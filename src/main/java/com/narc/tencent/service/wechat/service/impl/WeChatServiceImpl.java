@@ -168,6 +168,8 @@ public class WeChatServiceImpl implements WeChatService {
                 return tranTkl(content, "NORMAL", userInfo.getUserId(), userInfo.getRemark());
             case "TKL_VIP":
                 return tranTkl(content, "VIP", userInfo.getUserId(), userInfo.getRemark());
+            case "TKL_NULL":
+                return tranTkl(content, "NULL", userInfo.getUserId(), userInfo.getRemark());
             case "CHAT":
                 return "聊天模式暂未开放，敬请期待";
             case "CALC":
@@ -192,22 +194,18 @@ public class WeChatServiceImpl implements WeChatService {
 
 
     private WxtUserInfo initNewUser(String openId) {
+        log.info("新增用户：{}", openId);
         //初始化用户
         WxtUserInfo userInfo = new WxtUserInfo();
         userInfo.setUserId(UuidUtils.getUUID());
-        userInfo.setCreatedId("SYSTEM");
-        userInfo.setModifiedId("SYSTEM");
         userInfo.setOpenId(openId);
-        userInfo.setPattern("淘口令");
+        userInfo.setPattern("TKL");
         //初始化用户-角色
         WxtUserRole userRole = new WxtUserRole();
-        userRole.setId(UuidUtils.getUUID());
-        userRole.setRoleId("GUEST");
+        userRole.setRoleId("TKL");
         userRole.setUserId(userInfo.getUserId());
-        userRole.setCreatedId("SYSTEM");
-        userRole.setModifiedId("SYSTEM");
-        wxtUserInfoDaoService.insert(userInfo);
-        wxtUserRoleDaoService.insert(userRole);
+        wxtUserInfoDaoService.insertSelective(userInfo);
+        wxtUserRoleDaoService.insertSelective(userRole);
         return userInfo;
     }
 

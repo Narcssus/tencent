@@ -7,7 +7,7 @@
   请注意不要删除此文件的注释内容
   -->
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.CftRole">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
     <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />

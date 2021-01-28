@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.narc.tencent.service.wechat.dao.mapper.CftPermissionMapper">
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.CftPermission">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="PERMISSION_ID" jdbcType="VARCHAR" property="permissionId" />
     <result column="PERMISSION_NAME" jdbcType="VARCHAR" property="permissionName" />
     <result column="COMMAND" jdbcType="VARCHAR" property="command" />
@@ -89,15 +89,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from CFT_PERMISSION
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from CFT_PERMISSION
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.narc.tencent.service.wechat.entity.CftPermissionExample">
     delete from CFT_PERMISSION
@@ -110,7 +110,7 @@
       COMMAND, COMMAND_DESC, TYPE, 
       CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
       MODIFIED_ID)
-    values (#{id,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{permissionId,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
       #{command,jdbcType=VARCHAR}, #{commandDesc,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, 
       #{modifiedId,jdbcType=VARCHAR})
@@ -151,7 +151,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="permissionId != null">
         #{permissionId,jdbcType=VARCHAR},
@@ -192,7 +192,7 @@
     update CFT_PERMISSION
     <set>
       <if test="record.id != null">
-        ID = #{record.id,jdbcType=VARCHAR},
+        ID = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.permissionId != null">
         PERMISSION_ID = #{record.permissionId,jdbcType=VARCHAR},
@@ -228,7 +228,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update CFT_PERMISSION
-    set ID = #{record.id,jdbcType=VARCHAR},
+    set ID = #{record.id,jdbcType=INTEGER},
       PERMISSION_ID = #{record.permissionId,jdbcType=VARCHAR},
       PERMISSION_NAME = #{record.permissionName,jdbcType=VARCHAR},
       COMMAND = #{record.command,jdbcType=VARCHAR},
@@ -273,7 +273,7 @@
         MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.CftPermission">
     update CFT_PERMISSION
@@ -286,7 +286,7 @@
       CREATED_ID = #{createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
       MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <sql id="Batch_Insert_Column_List">
     #{item.id}, #{item.permissionId}, #{item.permissionName}, #{item.command}, #{item.commandDesc}, 

@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-用户表
  * 
  * @author Narc
- * @date 2020-11-26
+ * @date 2021-01-28
  */
 @Data
 public class WxtUserInfo {

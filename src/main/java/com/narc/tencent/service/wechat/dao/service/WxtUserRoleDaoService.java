@@ -22,8 +22,8 @@ public class WxtUserRoleDaoService {
     @Resource
     private WxtUserRoleMapperExtend wxtUserRoleMapperExtend;
 
-    public void insert(WxtUserRole wxtUserRole) {
-        wxtUserRoleMapper.insert(wxtUserRole);
+    public void insertSelective(WxtUserRole wxtUserRole) {
+        wxtUserRoleMapper.insertSelective(wxtUserRole);
     }
 
 

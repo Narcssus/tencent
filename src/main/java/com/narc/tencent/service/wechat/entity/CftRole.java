@@ -9,7 +9,7 @@ import lombok.Data;
  * 配置表-角色
  * 
  * @author Narc
- * @date 2020-11-26
+ * @date 2021-01-28
  */
 @Data
 public class CftRole {
@@ -17,9 +17,8 @@ public class CftRole {
      * ID
      * 主键
      */
-    @Size(max=64)
     @NotNull
-    private String id;
+    private Integer id;
 
     /**
      * ROLE_ID

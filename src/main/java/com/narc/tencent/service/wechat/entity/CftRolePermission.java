@@ -9,7 +9,7 @@ import lombok.Data;
  * 配置表-角色权限
  * 
  * @author Narc
- * @date 2020-11-26
+ * @date 2021-01-28
  */
 @Data
 public class CftRolePermission {
@@ -17,9 +17,8 @@ public class CftRolePermission {
      * ID
      * 主键
      */
-    @Size(max=64)
     @NotNull
-    private String id;
+    private Integer id;
 
     /**
      * ROLE_ID
@@ -32,7 +31,7 @@ public class CftRolePermission {
      * PERMISSION_ID
      * 权限ID
      */
-    @Size(max=16)
+    @Size(max=32)
     private String permissionId;
 
     /**

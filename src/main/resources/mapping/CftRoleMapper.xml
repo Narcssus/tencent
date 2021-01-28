@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.narc.tencent.service.wechat.dao.mapper.CftRoleMapper">
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.CftRole">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
     <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
@@ -85,15 +85,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from CFT_ROLE
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from CFT_ROLE
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.narc.tencent.service.wechat.entity.CftRoleExample">
     delete from CFT_ROLE
@@ -105,7 +105,7 @@
     insert into CFT_ROLE (ID, ROLE_ID, ROLE_NAME, 
       CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
       MODIFIED_ID)
-    values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
       #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, 
       #{modifiedId,jdbcType=VARCHAR})
   </insert>
@@ -136,7 +136,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="roleId != null">
         #{roleId,jdbcType=VARCHAR},
@@ -168,7 +168,7 @@
     update CFT_ROLE
     <set>
       <if test="record.id != null">
-        ID = #{record.id,jdbcType=VARCHAR},
+        ID = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.roleId != null">
         ROLE_ID = #{record.roleId,jdbcType=VARCHAR},
@@ -195,7 +195,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update CFT_ROLE
-    set ID = #{record.id,jdbcType=VARCHAR},
+    set ID = #{record.id,jdbcType=INTEGER},
       ROLE_ID = #{record.roleId,jdbcType=VARCHAR},
       ROLE_NAME = #{record.roleName,jdbcType=VARCHAR},
       CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
@@ -228,7 +228,7 @@
         MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.CftRole">
     update CFT_ROLE
@@ -238,7 +238,7 @@
       CREATED_ID = #{createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
       MODIFIED_ID = #{modifiedId,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <sql id="Batch_Insert_Column_List">
     #{item.id}, #{item.roleId}, #{item.roleName}, #{item.createdDatetime}, #{item.createdId}, 

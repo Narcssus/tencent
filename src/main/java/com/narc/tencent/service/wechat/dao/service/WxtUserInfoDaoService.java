@@ -38,10 +38,10 @@ public class WxtUserInfoDaoService {
         return list.get(0);
     }
 
-    public void insert(WxtUserInfo wxtUserInfo) {
+    public void insertSelective(WxtUserInfo wxtUserInfo) {
         wxtUserInfo.setCreatedDatetime(new Date());
         wxtUserInfo.setModifiedDatetime(new Date());
-        wxtUserInfoMapper.insert(wxtUserInfo);
+        wxtUserInfoMapper.insertSelective(wxtUserInfo);
     }
 
     public void updateByPrimaryKeySelective(WxtUserInfo wxtUserInfo){

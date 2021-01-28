@@ -9,7 +9,7 @@ import lombok.Data;
  * 配置表-权限
  * 
  * @author Narc
- * @date 2020-11-26
+ * @date 2021-01-28
  */
 @Data
 public class CftPermission {
@@ -17,9 +17,8 @@ public class CftPermission {
      * ID
      * 主键
      */
-    @Size(max=64)
     @NotNull
-    private String id;
+    private Integer id;
 
     /**
      * PERMISSION_ID

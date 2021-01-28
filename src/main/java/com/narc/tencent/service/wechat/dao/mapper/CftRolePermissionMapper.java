@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @author NarcMybatisGenerator
- * @date 2020-11-26
+ * @date 2021-01-28
 */
 @Mapper
 @SuppressWarnings("unused")
@@ -17,7 +17,7 @@ public interface CftRolePermissionMapper {
 
     int deleteByExample(CftRolePermissionExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(CftRolePermission record);
 
@@ -25,7 +25,7 @@ public interface CftRolePermissionMapper {
 
     List<CftRolePermission> selectByExample(CftRolePermissionExample example);
 
-    CftRolePermission selectByPrimaryKey(String id);
+    CftRolePermission selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") CftRolePermission record, @Param("example") CftRolePermissionExample example);
 

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @author NarcMybatisGenerator
- * @date 2020-11-26
+ * @date 2021-01-28
 */
 @Mapper
 @SuppressWarnings("unused")
@@ -17,7 +17,7 @@ public interface WxtUserRoleMapper {
 
     int deleteByExample(WxtUserRoleExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(WxtUserRole record);
 
@@ -25,7 +25,7 @@ public interface WxtUserRoleMapper {
 
     List<WxtUserRole> selectByExample(WxtUserRoleExample example);
 
-    WxtUserRole selectByPrimaryKey(String id);
+    WxtUserRole selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") WxtUserRole record, @Param("example") WxtUserRoleExample example);
 

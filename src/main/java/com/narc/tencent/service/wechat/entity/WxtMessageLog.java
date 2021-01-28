@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-消息日志
  * 
  * @author Narc
- * @date 2021-01-26
+ * @date 2021-01-28
  */
 @Data
 public class WxtMessageLog {
