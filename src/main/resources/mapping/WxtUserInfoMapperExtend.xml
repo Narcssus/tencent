@@ -9,6 +9,7 @@
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
     <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="PATTERN" jdbcType="VARCHAR" property="pattern" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
@@ -17,7 +18,7 @@
     <result column="MODIFIED_ID" jdbcType="VARCHAR" property="modifiedId" />
   </resultMap>
   <sql id="Base_Column_List">
-    USER_ID, OPEN_ID, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
+    USER_ID, OPEN_ID, NAME, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
     MODIFIED_ID
   </sql>
   <!-- 该注释以下的内容不会被覆盖，请不要删除或修改此条注释内容-->

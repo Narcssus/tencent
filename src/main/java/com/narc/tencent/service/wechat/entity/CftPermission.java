@@ -9,7 +9,7 @@ import lombok.Data;
  * 配置表-权限
  * 
  * @author Narc
- * @date 2021-01-28
+ * @date 2021-01-29
  */
 @Data
 public class CftPermission {
@@ -55,6 +55,13 @@ public class CftPermission {
     @Size(max=7)
     @NotNull
     private String type;
+
+    /**
+     * IS_SHOW
+     * 是否展示 0-不展示;1-展示
+     */
+    @Size(max=1)
+    private String isShow;
 
     /**
      * CREATED_DATETIME

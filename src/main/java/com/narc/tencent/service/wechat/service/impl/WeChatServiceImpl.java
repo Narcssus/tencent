@@ -64,9 +64,6 @@ public class WeChatServiceImpl implements WeChatService {
             String toUserName = msgLog.getToUserName();
             String content = msgLog.getContent();
             log.info("收到用户{}消息：{}", fromUserName, content);
-            if (StringUtils.isBlank(content)) {
-                return "";
-            }
             //获取用户信息
             WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(fromUserName);
             if (userInfo == null) {
@@ -75,6 +72,9 @@ public class WeChatServiceImpl implements WeChatService {
             }
             String rspContent = "暂不支持";
             switch (msgLog.getMsgType()) {
+                case WechatMessageUtil.MESSAGE_EVENT:
+                    rspContent = dealEvent(msgLog.getEvent(), userInfo);
+                    break;
                 case WechatMessageUtil.MESSAGE_TEXT:
                     rspContent = dealText(msgLog.getContent(), userInfo);
                     break;
@@ -105,7 +105,29 @@ public class WeChatServiceImpl implements WeChatService {
         List<CftPermission> patternCommands = allPermissions.stream()
                 .filter(o -> "PATTERN".equals(o.getType()))
                 .collect(Collectors.toList());
-        CftPermission nowPattern = cftPermissionDaoService.selectByPermissionId(userInfo.getPattern());
+        String userPattern = userInfo.getPattern();
+
+        CftPermission nowPattern = cftPermissionDaoService.selectByPermissionId(userPattern);
+        //判断是否在修改昵称
+        if (userPattern.startsWith("NAME") && userPattern.contains("|")) {
+            if (content == null || content.length() < 1 || content.length() > 14) {
+                return "请输入2-14个字符(中英文+数字)作为您的昵称，" +
+                        "注意：修改昵称前请确保没有未返现的订单";
+            }
+            //判断重复
+            if (wxtUserInfoDaoService.isExistName(content)) {
+                return "该昵称已存在，请重新输入2-14个字符(中英文+数字)作为您的昵称";
+            }
+            String nextPattern = userPattern.split("\\|")[1];
+            WxtUserInfo update = new WxtUserInfo();
+            update.setUserId(userInfo.getUserId());
+            update.setModifiedDatetime(new Date());
+            update.setName(content);
+            update.setPattern(nextPattern);
+            wxtUserInfoDaoService.updateByPrimaryKeySelective(update);
+            return "昵称设置成功！\r\n" + content + "您好！\r\n"
+                    + getHelp(nextPattern);
+        }
 
         for (CftPermission permission : basePermissionIds) {
             String pattern = permission.getCommand();
@@ -135,6 +157,9 @@ public class WeChatServiceImpl implements WeChatService {
                     StringBuilder sb = new StringBuilder();
                     sb.append("所有指令如下：").append("\r\n");
                     for (CftPermission p : basePermissionIds) {
+                        if ("0".equals(p.getIsShow())) {
+                            continue;
+                        }
                         sb.append(p.getPermissionName())
                                 .append("--")
                                 .append(p.getCommandDesc())
@@ -149,6 +174,9 @@ public class WeChatServiceImpl implements WeChatService {
                     sb = new StringBuilder();
                     sb.append("所有模式如下：").append("\r\n");
                     for (CftPermission p : patternCommands) {
+                        if ("0".equals(p.getIsShow())) {
+                            continue;
+                        }
                         sb.append(p.getPermissionName())
                                 .append("--")
                                 .append(p.getCommandDesc())
@@ -157,11 +185,17 @@ public class WeChatServiceImpl implements WeChatService {
                     return sb.toString();
                 case "SHOW_HELP":
                     //显示当前模式的使用说明
-                    return getHelp(nowPattern);
+                    return getHelp(nowPattern.getPermissionId());
+                case "CHANGE_NAME":
+                    //设置昵称模式
+                    userInfo.setPattern("NAME|" + userInfo.getPattern());
+                    wxtUserInfoDaoService.updateByPrimaryKeySelective(userInfo);
+                    return "请输入2-14个字符(中英文+数字)作为您的昵称，注意：修改昵称前请确保没有未返现的订单";
                 default:
                     return "请输入正确的指令";
             }
         }
+
         //判断是否是模式指令
         switch (nowPattern.getPermissionId()) {
             case "TKL":
@@ -179,6 +213,23 @@ public class WeChatServiceImpl implements WeChatService {
         }
     }
 
+    @Override
+    public String dealEvent(String event, WxtUserInfo userInfo) {
+        String rspContent = "暂不支持";
+        switch (event) {
+            case WechatMessageUtil.MESSAGE_EVENT_SUBSCRIBE:
+                log.info("新用户订阅OPEN_ID:{}", userInfo.getOpenId());
+                //订阅
+                rspContent = "欢迎关注本公众号，请输入2-14个字符(中英文+数字)作为您的昵称";
+                break;
+            case WechatMessageUtil.MESSAGE_EVENT_UNSUBSCRIBE:
+                //取消订阅
+                break;
+            default:
+                break;
+        }
+        return rspContent;
+    }
 
     private String returnTextMessage(String rspContent, String fromUserName, String toUserName) {
         TextMessage textMessage = new TextMessage();
@@ -199,7 +250,7 @@ public class WeChatServiceImpl implements WeChatService {
         WxtUserInfo userInfo = new WxtUserInfo();
         userInfo.setUserId(UuidUtils.getUUID());
         userInfo.setOpenId(openId);
-        userInfo.setPattern("TKL");
+        userInfo.setPattern("NAME|TKL");
         //初始化用户-角色
         WxtUserRole userRole = new WxtUserRole();
         userRole.setRoleId("TKL");
@@ -209,11 +260,15 @@ public class WeChatServiceImpl implements WeChatService {
         return userInfo;
     }
 
-    private String getHelp(CftPermission nowPattern) {
-        switch (nowPattern.getPermissionId()) {
+    private String getHelp(String nowPermissionId) {
+        switch (nowPermissionId) {
             case "TKL":
+            case "TKL_NULL":
             case "TKL_VIP":
-                return "淘口令使用说明";
+                return "<淘口令使用说明>\r\n" +
+                        "1.输入从天猫或淘宝拷贝的淘口令\r\n" +
+                        "2.复制公众号返回的优惠淘口令\r\n" +
+                        "3.转到天猫或淘宝，识别新的淘口令后即可获取优惠！";
             case "CHAT":
                 return "聊天模式使用说明";
             case "CALC":

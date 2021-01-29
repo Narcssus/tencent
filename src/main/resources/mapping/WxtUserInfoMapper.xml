@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
     <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="PATTERN" jdbcType="VARCHAR" property="pattern" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    USER_ID, OPEN_ID, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
+    USER_ID, OPEN_ID, NAME, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
     MODIFIED_ID
   </sql>
   <select id="selectByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfoExample" resultMap="BaseResultMap">
@@ -104,12 +105,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
-    insert into WXT_USER_INFO (USER_ID, OPEN_ID, REMARK, 
-      PATTERN, CREATED_DATETIME, CREATED_ID, 
-      MODIFIED_DATETIME, MODIFIED_ID)
-    values (#{userId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{pattern,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, 
-      #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR})
+    insert into WXT_USER_INFO (USER_ID, OPEN_ID, NAME, 
+      REMARK, PATTERN, CREATED_DATETIME, 
+      CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{pattern,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, 
+      #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     insert into WXT_USER_INFO
@@ -119,6 +122,9 @@
       </if>
       <if test="openId != null">
         OPEN_ID,
+      </if>
+      <if test="name != null">
+        NAME,
       </if>
       <if test="remark != null">
         REMARK,
@@ -145,6 +151,9 @@
       </if>
       <if test="openId != null">
         #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -181,6 +190,9 @@
       <if test="record.openId != null">
         OPEN_ID = #{record.openId,jdbcType=VARCHAR},
       </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
       <if test="record.remark != null">
         REMARK = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -208,6 +220,7 @@
     update WXT_USER_INFO
     set USER_ID = #{record.userId,jdbcType=VARCHAR},
       OPEN_ID = #{record.openId,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
       REMARK = #{record.remark,jdbcType=VARCHAR},
       PATTERN = #{record.pattern,jdbcType=VARCHAR},
       CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
@@ -223,6 +236,9 @@
     <set>
       <if test="openId != null">
         OPEN_ID = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         REMARK = #{remark,jdbcType=VARCHAR},
@@ -248,6 +264,7 @@
   <update id="updateByPrimaryKey" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     update WXT_USER_INFO
     set OPEN_ID = #{openId,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
       PATTERN = #{pattern,jdbcType=VARCHAR},
       CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
@@ -257,7 +274,7 @@
     where USER_ID = #{userId,jdbcType=VARCHAR}
   </update>
   <sql id="Batch_Insert_Column_List">
-    #{item.userId}, #{item.openId}, #{item.remark}, #{item.pattern}, #{item.createdDatetime}, 
+    #{item.userId}, #{item.openId}, #{item.name}, #{item.remark}, #{item.pattern}, #{item.createdDatetime}, 
     #{item.createdId}, #{item.modifiedDatetime}, #{item.modifiedId}
   </sql>
   <insert id="insertBatch" parameterType="java.util.List">

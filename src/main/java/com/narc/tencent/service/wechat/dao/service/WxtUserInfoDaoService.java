@@ -44,11 +44,16 @@ public class WxtUserInfoDaoService {
         wxtUserInfoMapper.insertSelective(wxtUserInfo);
     }
 
-    public void updateByPrimaryKeySelective(WxtUserInfo wxtUserInfo){
+    public void updateByPrimaryKeySelective(WxtUserInfo wxtUserInfo) {
         wxtUserInfo.setModifiedDatetime(new Date());
         wxtUserInfoMapper.updateByPrimaryKeySelective(wxtUserInfo);
     }
 
+    public boolean isExistName(String name) {
+        WxtUserInfoExample example = new WxtUserInfoExample();
+        example.createCriteria().andNameEqualTo(name);
+        return wxtUserInfoMapper.countByExample(example) > 0;
+    }
 
 
 }

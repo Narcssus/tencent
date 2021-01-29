@@ -13,18 +13,19 @@
     <result column="COMMAND" jdbcType="VARCHAR" property="command" />
     <result column="COMMAND_DESC" jdbcType="VARCHAR" property="commandDesc" />
     <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="IS_SHOW" jdbcType="VARCHAR" property="isShow" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
     <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
     <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
     <result column="MODIFIED_ID" jdbcType="VARCHAR" property="modifiedId" />
   </resultMap>
   <sql id="Base_Column_List">
-    ID, PERMISSION_ID, PERMISSION_NAME, COMMAND, COMMAND_DESC, TYPE, CREATED_DATETIME, 
+    ID, PERMISSION_ID, PERMISSION_NAME, COMMAND, COMMAND_DESC, TYPE, IS_SHOW, CREATED_DATETIME, 
     CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
   </sql>
     <!-- 该注释以下的内容不会被覆盖，请不要删除或修改此条注释内容-->
   <sql id="d_Base_Column_List">
-    d.ID, d.PERMISSION_ID, d.PERMISSION_NAME, d.COMMAND, d.COMMAND_DESC, d.TYPE, d.CREATED_DATETIME,
+    d.ID, d.PERMISSION_ID, d.PERMISSION_NAME, d.COMMAND, d.COMMAND_DESC, d.TYPE, d.IS_SHOW, d.CREATED_DATETIME,
     d.CREATED_ID, d.MODIFIED_DATETIME, d.MODIFIED_ID
     </sql>
   

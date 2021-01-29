@@ -9,7 +9,7 @@ import lombok.Data;
  * 微信-用户表
  * 
  * @author Narc
- * @date 2021-01-28
+ * @date 2021-01-29
  */
 @Data
 public class WxtUserInfo {
@@ -27,6 +27,13 @@ public class WxtUserInfo {
      */
     @Size(max=64)
     private String openId;
+
+    /**
+     * NAME
+     * 昵称
+     */
+    @Size(max=16)
+    private String name;
 
     /**
      * REMARK

@@ -515,6 +515,76 @@ public class CftPermissionExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsShowIsNull() {
+            addCriterion("IS_SHOW is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowIsNotNull() {
+            addCriterion("IS_SHOW is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowEqualTo(String value) {
+            addCriterion("IS_SHOW =", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotEqualTo(String value) {
+            addCriterion("IS_SHOW <>", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowGreaterThan(String value) {
+            addCriterion("IS_SHOW >", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowGreaterThanOrEqualTo(String value) {
+            addCriterion("IS_SHOW >=", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowLessThan(String value) {
+            addCriterion("IS_SHOW <", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowLessThanOrEqualTo(String value) {
+            addCriterion("IS_SHOW <=", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowLike(String value) {
+            addCriterion("IS_SHOW like", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotLike(String value) {
+            addCriterion("IS_SHOW not like", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowIn(List<String> values) {
+            addCriterion("IS_SHOW in", values, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotIn(List<String> values) {
+            addCriterion("IS_SHOW not in", values, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowBetween(String value1, String value2) {
+            addCriterion("IS_SHOW between", value1, value2, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotBetween(String value1, String value2) {
+            addCriterion("IS_SHOW not between", value1, value2, "isShow");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedDatetimeIsNull() {
             addCriterion("CREATED_DATETIME is null");
             return (Criteria) this;
