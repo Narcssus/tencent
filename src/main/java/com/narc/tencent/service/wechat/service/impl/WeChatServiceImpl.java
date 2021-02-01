@@ -60,6 +60,10 @@ public class WeChatServiceImpl implements WeChatService {
             log.info("收到微信公众号请求:{}", jsonStr);
             msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
             msgLog.setCreateTime(new Date(Long.parseLong(map.get("CreateTime") + "000")));
+            //判断重复
+            if (wxtMessageLogDaoService.isExist(msgLog.getFromUserName(), msgLog.getCreatedDatetime())) {
+                return "";
+            }
             String fromUserName = msgLog.getFromUserName();
             String toUserName = msgLog.getToUserName();
             String content = msgLog.getContent();
