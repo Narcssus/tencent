@@ -21,5 +21,13 @@ public class DefaultFallbackImpl implements AlimamaService {
         return jsonObject;
     }
 
+    @Override
+    public JSONObject dealTklAdmin(String param) {
+        log.info("请求：{}，降级处理", param);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("res", "目前服务不可用，请稍后再试");
+        return jsonObject;
+    }
+
 
 }

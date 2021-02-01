@@ -61,7 +61,7 @@ public class WeChatServiceImpl implements WeChatService {
             msgLog = JSON.parseObject(jsonStr, WxtMessageLog.class);
             msgLog.setCreateTime(new Date(Long.parseLong(map.get("CreateTime") + "000")));
             //判断重复
-            if (wxtMessageLogDaoService.isExist(msgLog.getFromUserName(), msgLog.getCreatedDatetime())) {
+            if (wxtMessageLogDaoService.isExist(msgLog.getFromUserName(), msgLog.getCreateTime())) {
                 return "";
             }
             String fromUserName = msgLog.getFromUserName();
@@ -208,6 +208,8 @@ public class WeChatServiceImpl implements WeChatService {
                 return tranTkl(content, "VIP", userInfo.getUserId(), userInfo.getRemark());
             case "TKL_NULL":
                 return tranTkl(content, "NULL", userInfo.getUserId(), userInfo.getRemark());
+            case "TKL_ADMIN":
+                return dealTklAdmin(content, userInfo.getUserId(), userInfo.getRemark());
             case "CHAT":
                 return "聊天模式暂未开放，敬请期待";
             case "CALC":
@@ -265,21 +267,11 @@ public class WeChatServiceImpl implements WeChatService {
     }
 
     private String getHelp(String nowPermissionId) {
-        switch (nowPermissionId) {
-            case "TKL":
-            case "TKL_NULL":
-            case "TKL_VIP":
-                return "<淘口令使用说明>\r\n" +
-                        "1.输入从天猫或淘宝拷贝的淘口令\r\n" +
-                        "2.复制公众号返回的优惠淘口令\r\n" +
-                        "3.转到天猫或淘宝，识别新的淘口令后即可获取优惠！";
-            case "CHAT":
-                return "聊天模式使用说明";
-            case "CALC":
-                return "计算模式使用说明";
-            default:
-                return "当前模式没有相关使用说明";
+        CftPermission nowPattern = cftPermissionDaoService.selectByPermissionId(nowPermissionId);
+        if(StringUtils.isBlank(nowPattern.getHelp())){
+            return "当前模式没有相关使用说明";
         }
+        return nowPattern.getHelp();
     }
 
     private String tranTkl(String originalWord, String type, String senderId, String senderName) {
@@ -299,4 +291,22 @@ public class WeChatServiceImpl implements WeChatService {
         log.info(res.toJSONString());
         return res.getString("tranShareWord");
     }
+
+    private String dealTklAdmin(String originalWord, String senderId, String senderName) {
+        JSONObject paramObject = new JSONObject();
+        paramObject.put("originalWord", originalWord);
+        paramObject.put("requestId", UuidUtils.getUUID());
+        paramObject.put("senderId", senderId);
+        paramObject.put("senderName", senderName);
+        JSONObject res = new JSONObject();
+        try {
+            log.info("调用alimamaService-dealTklAdmin，请求：{}", paramObject.toJSONString());
+            res = alimamaService.dealTklAdmin(paramObject.toJSONString());
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        log.info(res.toJSONString());
+        return res.getString("res");
+    }
+
 }

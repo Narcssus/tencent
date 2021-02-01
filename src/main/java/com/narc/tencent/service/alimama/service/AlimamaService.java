@@ -29,6 +29,14 @@ public interface AlimamaService {
     @RequestMapping(value = "/alimama/tranShareWord", method = RequestMethod.GET)
     JSONObject tranTkl(@RequestParam("param") String param);
 
+    /**
+     * 淘口令管理接口
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/alimama/dealTklAdmin", method = RequestMethod.GET)
+    JSONObject dealTklAdmin(@RequestParam("param") String param);
+
 
 
 }

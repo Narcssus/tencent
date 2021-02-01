@@ -9,6 +9,7 @@
     <result column="COMMAND_DESC" jdbcType="VARCHAR" property="commandDesc" />
     <result column="TYPE" jdbcType="CHAR" property="type" />
     <result column="IS_SHOW" jdbcType="VARCHAR" property="isShow" />
+    <result column="HELP" jdbcType="VARCHAR" property="help" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
     <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
     <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
@@ -73,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, PERMISSION_ID, PERMISSION_NAME, COMMAND, COMMAND_DESC, TYPE, IS_SHOW, CREATED_DATETIME, 
+    ID, PERMISSION_ID, PERMISSION_NAME, COMMAND, COMMAND_DESC, TYPE, IS_SHOW, HELP, CREATED_DATETIME, 
     CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
   </sql>
   <select id="selectByExample" parameterType="com.narc.tencent.service.wechat.entity.CftPermissionExample" resultMap="BaseResultMap">
@@ -109,12 +110,14 @@
   <insert id="insert" parameterType="com.narc.tencent.service.wechat.entity.CftPermission">
     insert into CFT_PERMISSION (ID, PERMISSION_ID, PERMISSION_NAME, 
       COMMAND, COMMAND_DESC, TYPE, 
-      IS_SHOW, CREATED_DATETIME, CREATED_ID, 
-      MODIFIED_DATETIME, MODIFIED_ID)
+      IS_SHOW, HELP, CREATED_DATETIME, 
+      CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
+      )
     values (#{id,jdbcType=INTEGER}, #{permissionId,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
       #{command,jdbcType=VARCHAR}, #{commandDesc,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{isShow,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, 
-      #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR})
+      #{isShow,jdbcType=VARCHAR}, #{help,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, 
+      #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.narc.tencent.service.wechat.entity.CftPermission">
     insert into CFT_PERMISSION
@@ -139,6 +142,9 @@
       </if>
       <if test="isShow != null">
         IS_SHOW,
+      </if>
+      <if test="help != null">
+        HELP,
       </if>
       <if test="createdDatetime != null">
         CREATED_DATETIME,
@@ -174,6 +180,9 @@
       </if>
       <if test="isShow != null">
         #{isShow,jdbcType=VARCHAR},
+      </if>
+      <if test="help != null">
+        #{help,jdbcType=VARCHAR},
       </if>
       <if test="createdDatetime != null">
         #{createdDatetime,jdbcType=TIMESTAMP},
@@ -219,6 +228,9 @@
       <if test="record.isShow != null">
         IS_SHOW = #{record.isShow,jdbcType=VARCHAR},
       </if>
+      <if test="record.help != null">
+        HELP = #{record.help,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdDatetime != null">
         CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -245,6 +257,7 @@
       COMMAND_DESC = #{record.commandDesc,jdbcType=VARCHAR},
       TYPE = #{record.type,jdbcType=CHAR},
       IS_SHOW = #{record.isShow,jdbcType=VARCHAR},
+      HELP = #{record.help,jdbcType=VARCHAR},
       CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
       CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
@@ -274,6 +287,9 @@
       <if test="isShow != null">
         IS_SHOW = #{isShow,jdbcType=VARCHAR},
       </if>
+      <if test="help != null">
+        HELP = #{help,jdbcType=VARCHAR},
+      </if>
       <if test="createdDatetime != null">
         CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -297,6 +313,7 @@
       COMMAND_DESC = #{commandDesc,jdbcType=VARCHAR},
       TYPE = #{type,jdbcType=CHAR},
       IS_SHOW = #{isShow,jdbcType=VARCHAR},
+      HELP = #{help,jdbcType=VARCHAR},
       CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
       CREATED_ID = #{createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
@@ -305,8 +322,8 @@
   </update>
   <sql id="Batch_Insert_Column_List">
     #{item.id}, #{item.permissionId}, #{item.permissionName}, #{item.command}, #{item.commandDesc}, 
-    #{item.type}, #{item.isShow}, #{item.createdDatetime}, #{item.createdId}, #{item.modifiedDatetime}, 
-    #{item.modifiedId}
+    #{item.type}, #{item.isShow}, #{item.help}, #{item.createdDatetime}, #{item.createdId}, 
+    #{item.modifiedDatetime}, #{item.modifiedId}
   </sql>
   <insert id="insertBatch" parameterType="java.util.List">
     insert into CFT_PERMISSION(

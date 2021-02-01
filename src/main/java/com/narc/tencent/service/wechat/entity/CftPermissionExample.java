@@ -585,6 +585,76 @@ public class CftPermissionExample {
             return (Criteria) this;
         }
 
+        public Criteria andHelpIsNull() {
+            addCriterion("HELP is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpIsNotNull() {
+            addCriterion("HELP is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpEqualTo(String value) {
+            addCriterion("HELP =", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpNotEqualTo(String value) {
+            addCriterion("HELP <>", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpGreaterThan(String value) {
+            addCriterion("HELP >", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpGreaterThanOrEqualTo(String value) {
+            addCriterion("HELP >=", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpLessThan(String value) {
+            addCriterion("HELP <", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpLessThanOrEqualTo(String value) {
+            addCriterion("HELP <=", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpLike(String value) {
+            addCriterion("HELP like", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpNotLike(String value) {
+            addCriterion("HELP not like", value, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpIn(List<String> values) {
+            addCriterion("HELP in", values, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpNotIn(List<String> values) {
+            addCriterion("HELP not in", values, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpBetween(String value1, String value2) {
+            addCriterion("HELP between", value1, value2, "help");
+            return (Criteria) this;
+        }
+
+        public Criteria andHelpNotBetween(String value1, String value2) {
+            addCriterion("HELP not between", value1, value2, "help");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedDatetimeIsNull() {
             addCriterion("CREATED_DATETIME is null");
             return (Criteria) this;
