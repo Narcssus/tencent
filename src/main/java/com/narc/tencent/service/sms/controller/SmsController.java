@@ -1,5 +1,6 @@
 package com.narc.tencent.service.sms.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.narc.tencent.service.sms.service.SmsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,15 +29,16 @@ public class SmsController {
     private String adminPhone;
 
     @PostMapping(value = "sendAlimamaAuthCodeNotice", produces = "application/text;charset=UTF-8")
-    public String sendAlimamaAuthCodeNotice() {
+    public JSONObject sendAlimamaAuthCodeNotice() {
         try {
+            log.debug("收到sendAlimamaAuthCodeNotice消息");
             String[] phones = {adminPhone};
             String[] templateParam = {};
             smsService.sendMessage("892286", phones, templateParam);
-            return "success";
+            return new JSONObject();
         } catch (Exception e) {
             log.error("", e);
-            return "error";
+            return new JSONObject();
         }
     }
 
