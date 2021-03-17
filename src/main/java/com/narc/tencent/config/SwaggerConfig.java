@@ -1,5 +1,6 @@
 package com.narc.tencent.config;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,18 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.narc.tencent.service.wechat.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public Docket smsRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("短信相关接口")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.narc.tencent.service.sms.controller"))
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build();
     }

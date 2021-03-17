@@ -1,26 +1,15 @@
 package com.narc.tencent.service.wechat.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
-import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
-import com.narc.tencent.service.wechat.entity.CftPermission;
-import com.narc.tencent.service.wechat.entity.WxtMessageLog;
-import com.narc.tencent.service.wechat.entity.WxtUserInfo;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
  * @author : Narcssus
@@ -28,7 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wechat")
-@Api(tags = "微信公众号相关接口")
+@Api(value = "wechat api", tags = "微信公众号相关接口")
 @Slf4j
 public class WeChatController {
 
@@ -77,19 +66,18 @@ public class WeChatController {
         }
     }
 
-    @Autowired
-    private WxtUserInfoDaoService wxtUserInfoDaoService;
+//    @Autowired
+//    private WxtUserInfoDaoService wxtUserInfoDaoService;
 
-    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
-    public String test(String openId, String content) {
-        try {
-            WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(openId);
-            return weChatService.dealText(content, userInfo);
-        } catch (Exception e) {
-            log.error("", e);
-            return "error";
-        }
-    }
-
+//    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
+//    public String test(String openId, String content) {
+//        try {
+//            WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(openId);
+//            return weChatService.dealText(content, userInfo);
+//        } catch (Exception e) {
+//            log.error("", e);
+//            return "error";
+//        }
+//    }
 
 }
