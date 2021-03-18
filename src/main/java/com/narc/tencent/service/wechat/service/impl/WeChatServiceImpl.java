@@ -229,27 +229,28 @@ public class WeChatServiceImpl implements WeChatService {
 
     @Override
     public String dealVoice(WxtMessageLog msg, WxtUserInfo userInfo) {
-        if(StringUtils.isBlank(userInfo.getPhoneNo())){
+        if (StringUtils.isBlank(userInfo.getPhoneNo())) {
             return "您尚未配置手机号码，请联系管理员配置";
         }
         String asrText = msg.getRecognition();
-        if(StringUtils.isBlank(asrText)){
+        if (StringUtils.isBlank(asrText)) {
             return "未识别出您的语音，请用标准话重说一次或稍候再试";
         }
         JSONObject nlpRes = nlpService.timeNlp(asrText);
         JSONArray timeList = nlpRes.getJSONArray("timeList");
-        if(CollectionUtils.isEmpty(timeList)){
+        if (CollectionUtils.isEmpty(timeList)) {
             return "未识别出您的语音中的时间，请用标准话重说一次";
         }
+        String ansText = nlpRes.getString("formatStr");
         List<Date> dateList = new ArrayList<>();
-        for(int i=0;i<timeList.size();i++){
+        for (int i = 0; i < timeList.size(); i++) {
             JSONObject timeObj = timeList.getJSONObject(i);
             Date time = timeObj.getDate("time");
-            String expression  = timeObj.getString("timeExpression");
-            asrText = asrText.replace(expression,"【"+timeObj.getString("time")+"】");
             dateList.add(time);
+            String expression = timeObj.getString("timeExpression");
+            ansText = ansText.replace(expression, "【" + timeObj.getString("time") + "】");
         }
-        return asrText;
+        return ansText;
     }
 
     @Override
@@ -301,7 +302,7 @@ public class WeChatServiceImpl implements WeChatService {
 
     private String getHelp(String nowPermissionId) {
         CftPermission nowPattern = cftPermissionDaoService.selectByPermissionId(nowPermissionId);
-        if(StringUtils.isBlank(nowPattern.getHelp())){
+        if (StringUtils.isBlank(nowPattern.getHelp())) {
             return "当前模式没有相关使用说明";
         }
         return nowPattern.getHelp();
