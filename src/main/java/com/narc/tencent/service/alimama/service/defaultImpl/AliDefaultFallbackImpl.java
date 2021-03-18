@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class DefaultFallbackImpl implements AlimamaService {
+public class AliDefaultFallbackImpl implements AlimamaService {
 
     @Override
     public JSONObject tranTkl(String param) {

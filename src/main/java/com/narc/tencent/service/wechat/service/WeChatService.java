@@ -21,6 +21,8 @@ public interface WeChatService {
 
     String dealText(String content, WxtUserInfo userInfo);
 
+    String dealVoice(WxtMessageLog msgLog, WxtUserInfo userInfo);
+
     String dealEvent(String event, WxtUserInfo userInfo);
 
 }

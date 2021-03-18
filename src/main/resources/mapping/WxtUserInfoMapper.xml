@@ -7,6 +7,7 @@
     <result column="NAME" jdbcType="VARCHAR" property="name" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="PATTERN" jdbcType="VARCHAR" property="pattern" />
+    <result column="PHONE_NO" jdbcType="VARCHAR" property="phoneNo" />
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDatetime" />
     <result column="CREATED_ID" jdbcType="VARCHAR" property="createdId" />
     <result column="MODIFIED_DATETIME" jdbcType="TIMESTAMP" property="modifiedDatetime" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    USER_ID, OPEN_ID, NAME, REMARK, PATTERN, CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
-    MODIFIED_ID
+    USER_ID, OPEN_ID, NAME, REMARK, PATTERN, PHONE_NO, CREATED_DATETIME, CREATED_ID, 
+    MODIFIED_DATETIME, MODIFIED_ID
   </sql>
   <select id="selectByExample" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfoExample" resultMap="BaseResultMap">
     select
@@ -106,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     insert into WXT_USER_INFO (USER_ID, OPEN_ID, NAME, 
-      REMARK, PATTERN, CREATED_DATETIME, 
-      CREATED_ID, MODIFIED_DATETIME, MODIFIED_ID
-      )
+      REMARK, PATTERN, PHONE_NO, 
+      CREATED_DATETIME, CREATED_ID, MODIFIED_DATETIME, 
+      MODIFIED_ID)
     values (#{userId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{pattern,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, 
-      #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, #{modifiedId,jdbcType=VARCHAR}
-      )
+      #{remark,jdbcType=VARCHAR}, #{pattern,jdbcType=VARCHAR}, #{phoneNo,jdbcType=VARCHAR}, 
+      #{createdDatetime,jdbcType=TIMESTAMP}, #{createdId,jdbcType=VARCHAR}, #{modifiedDatetime,jdbcType=TIMESTAMP}, 
+      #{modifiedId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.narc.tencent.service.wechat.entity.WxtUserInfo">
     insert into WXT_USER_INFO
@@ -131,6 +132,9 @@
       </if>
       <if test="pattern != null">
         PATTERN,
+      </if>
+      <if test="phoneNo != null">
+        PHONE_NO,
       </if>
       <if test="createdDatetime != null">
         CREATED_DATETIME,
@@ -160,6 +164,9 @@
       </if>
       <if test="pattern != null">
         #{pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNo != null">
+        #{phoneNo,jdbcType=VARCHAR},
       </if>
       <if test="createdDatetime != null">
         #{createdDatetime,jdbcType=TIMESTAMP},
@@ -199,6 +206,9 @@
       <if test="record.pattern != null">
         PATTERN = #{record.pattern,jdbcType=VARCHAR},
       </if>
+      <if test="record.phoneNo != null">
+        PHONE_NO = #{record.phoneNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdDatetime != null">
         CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -223,6 +233,7 @@
       NAME = #{record.name,jdbcType=VARCHAR},
       REMARK = #{record.remark,jdbcType=VARCHAR},
       PATTERN = #{record.pattern,jdbcType=VARCHAR},
+      PHONE_NO = #{record.phoneNo,jdbcType=VARCHAR},
       CREATED_DATETIME = #{record.createdDatetime,jdbcType=TIMESTAMP},
       CREATED_ID = #{record.createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{record.modifiedDatetime,jdbcType=TIMESTAMP},
@@ -246,6 +257,9 @@
       <if test="pattern != null">
         PATTERN = #{pattern,jdbcType=VARCHAR},
       </if>
+      <if test="phoneNo != null">
+        PHONE_NO = #{phoneNo,jdbcType=VARCHAR},
+      </if>
       <if test="createdDatetime != null">
         CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -267,6 +281,7 @@
       NAME = #{name,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
       PATTERN = #{pattern,jdbcType=VARCHAR},
+      PHONE_NO = #{phoneNo,jdbcType=VARCHAR},
       CREATED_DATETIME = #{createdDatetime,jdbcType=TIMESTAMP},
       CREATED_ID = #{createdId,jdbcType=VARCHAR},
       MODIFIED_DATETIME = #{modifiedDatetime,jdbcType=TIMESTAMP},
@@ -274,8 +289,8 @@
     where USER_ID = #{userId,jdbcType=VARCHAR}
   </update>
   <sql id="Batch_Insert_Column_List">
-    #{item.userId}, #{item.openId}, #{item.name}, #{item.remark}, #{item.pattern}, #{item.createdDatetime}, 
-    #{item.createdId}, #{item.modifiedDatetime}, #{item.modifiedId}
+    #{item.userId}, #{item.openId}, #{item.name}, #{item.remark}, #{item.pattern}, #{item.phoneNo}, 
+    #{item.createdDatetime}, #{item.createdId}, #{item.modifiedDatetime}, #{item.modifiedId}
   </sql>
   <insert id="insertBatch" parameterType="java.util.List">
     insert into WXT_USER_INFO(

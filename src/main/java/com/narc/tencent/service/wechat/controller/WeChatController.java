@@ -1,5 +1,7 @@
 package com.narc.tencent.service.wechat.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;
@@ -67,16 +69,16 @@ public class WeChatController {
     }
 
 //    @Autowired
-//    private WxtUserInfoDaoService wxtUserInfoDaoService;
-
+//    private NlpService nlpService;
+//
 //    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
-//    public String test(String openId, String content) {
+//    public String test(String param) {
 //        try {
-//            WxtUserInfo userInfo = wxtUserInfoDaoService.getUserByOpenId(openId);
-//            return weChatService.dealText(content, userInfo);
+//            JSONObject jsonObject = nlpService.timeNlp(param);
+//            return jsonObject.toJSONString();
 //        } catch (Exception e) {
 //            log.error("", e);
-//            return "error";
+//            return null;
 //        }
 //    }
 

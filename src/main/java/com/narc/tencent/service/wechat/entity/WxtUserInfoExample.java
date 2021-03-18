@@ -455,6 +455,76 @@ public class WxtUserInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andPhoneNoIsNull() {
+            addCriterion("PHONE_NO is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoIsNotNull() {
+            addCriterion("PHONE_NO is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoEqualTo(String value) {
+            addCriterion("PHONE_NO =", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoNotEqualTo(String value) {
+            addCriterion("PHONE_NO <>", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoGreaterThan(String value) {
+            addCriterion("PHONE_NO >", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoGreaterThanOrEqualTo(String value) {
+            addCriterion("PHONE_NO >=", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoLessThan(String value) {
+            addCriterion("PHONE_NO <", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoLessThanOrEqualTo(String value) {
+            addCriterion("PHONE_NO <=", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoLike(String value) {
+            addCriterion("PHONE_NO like", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoNotLike(String value) {
+            addCriterion("PHONE_NO not like", value, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoIn(List<String> values) {
+            addCriterion("PHONE_NO in", values, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoNotIn(List<String> values) {
+            addCriterion("PHONE_NO not in", values, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoBetween(String value1, String value2) {
+            addCriterion("PHONE_NO between", value1, value2, "phoneNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNoNotBetween(String value1, String value2) {
+            addCriterion("PHONE_NO not between", value1, value2, "phoneNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedDatetimeIsNull() {
             addCriterion("CREATED_DATETIME is null");
             return (Criteria) this;

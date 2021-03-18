@@ -1,11 +1,9 @@
 package com.narc.tencent.service.alimama.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.narc.tencent.service.alimama.service.defaultImpl.DefaultFallbackImpl;
-import lombok.extern.slf4j.Slf4j;
+import com.narc.tencent.service.alimama.service.defaultImpl.AliDefaultFallbackImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date : 2020/11/25 21:46
  */
 @Primary
-@FeignClient(name = "alibaba", fallback = DefaultFallbackImpl.class)
+@FeignClient(name = "alibaba", fallback = AliDefaultFallbackImpl.class)
 public interface AlimamaService {
 
     /**

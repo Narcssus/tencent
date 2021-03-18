@@ -1,8 +1,10 @@
 package com.narc.tencent.service.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.narc.tencent.service.alimama.service.AlimamaService;
+import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtMessageLogDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
@@ -17,13 +19,12 @@ import com.narc.tencent.utils.UuidUtils;
 import com.narc.tencent.utils.WechatMessageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,9 @@ public class WeChatServiceImpl implements WeChatService {
         this.cftPermissionDaoService = cftPermissionDaoService;
         this.wxtMessageLogDaoService = wxtMessageLogDaoService;
     }
+
+    @Autowired
+    private NlpService nlpService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -81,6 +85,9 @@ public class WeChatServiceImpl implements WeChatService {
                     break;
                 case WechatMessageUtil.MESSAGE_TEXT:
                     rspContent = dealText(msgLog.getContent(), userInfo);
+                    break;
+                case WechatMessageUtil.MESSAGE_VOICE:
+                    rspContent = dealVoice(msgLog, userInfo);
                     break;
                 case WechatMessageUtil.MESSAGE_IMAGE:
                     rspContent = "暂不支持图片处理";
@@ -217,6 +224,32 @@ public class WeChatServiceImpl implements WeChatService {
             default:
                 return "请输入正确的指令";
         }
+    }
+
+
+    @Override
+    public String dealVoice(WxtMessageLog msg, WxtUserInfo userInfo) {
+        if(StringUtils.isBlank(userInfo.getPhoneNo())){
+            return "您尚未配置手机号码，请联系管理员配置";
+        }
+        String asrText = msg.getRecognition();
+        if(StringUtils.isBlank(asrText)){
+            return "未识别出您的语音，请用标准话重说一次或稍候再试";
+        }
+        JSONObject nlpRes = nlpService.timeNlp(asrText);
+        JSONArray timeList = nlpRes.getJSONArray("timeList");
+        if(CollectionUtils.isEmpty(timeList)){
+            return "未识别出您的语音中的时间，请用标准话重说一次";
+        }
+        List<Date> dateList = new ArrayList<>();
+        for(int i=0;i<timeList.size();i++){
+            JSONObject timeObj = timeList.getJSONObject(i);
+            Date time = timeObj.getDate("time");
+            String expression  = timeObj.getString("timeExpression");
+            asrText = asrText.replace(expression,"【"+timeObj.getString("time")+"】");
+            dateList.add(time);
+        }
+        return asrText;
     }
 
     @Override
