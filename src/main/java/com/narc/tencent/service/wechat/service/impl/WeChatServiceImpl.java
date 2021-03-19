@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.narc.tencent.service.alimama.service.AlimamaService;
 import com.narc.tencent.service.nlp.service.NlpService;
+import com.narc.tencent.service.sms.bo.AddSmsTaskReq;
+import com.narc.tencent.service.sms.enums.SmsTaskType;
+import com.narc.tencent.service.sms.service.SmsService;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtMessageLogDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
@@ -15,6 +18,7 @@ import com.narc.tencent.service.wechat.entity.WxtUserInfo;
 import com.narc.tencent.service.wechat.entity.WxtUserRole;
 import com.narc.tencent.service.wechat.entity.message.TextMessage;
 import com.narc.tencent.service.wechat.service.WeChatService;
+import com.narc.tencent.utils.DateUtils;
 import com.narc.tencent.utils.UuidUtils;
 import com.narc.tencent.utils.WechatMessageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +57,8 @@ public class WeChatServiceImpl implements WeChatService {
 
     @Autowired
     private NlpService nlpService;
+    @Autowired
+    private SmsService smsService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -241,16 +247,54 @@ public class WeChatServiceImpl implements WeChatService {
         if (CollectionUtils.isEmpty(timeList)) {
             return "未识别出您的语音中的时间，请用标准话重说一次";
         }
-        String ansText = nlpRes.getString("formatStr");
-        List<Date> dateList = new ArrayList<>();
+        StringBuilder ansBuilder = new StringBuilder();
+        ansBuilder.append("[").append(nlpRes.getString("formatStr")).append("]")
+                .append("\r\n任务已设置完成，");
+        List<AddSmsTaskReq> taskList = new ArrayList<>();
         for (int i = 0; i < timeList.size(); i++) {
+            AddSmsTaskReq req = new AddSmsTaskReq();
+            req.setTemplateId("893655");
+            req.setPhoneNumberSet(JSON.toJSONString(Collections.singletonList(userInfo.getPhoneNo())));
+            // TODO: 2021/3/19 模板参数
+            req.setTemplateParam(JSON.toJSONString(Collections.singletonList("1")));
             JSONObject timeObj = timeList.getJSONObject(i);
             Date time = timeObj.getDate("time");
-            dateList.add(time);
+            boolean isCron = timeObj.getBoolean("isCron");
+            String cron = timeObj.getString("cron");
             String expression = timeObj.getString("timeExpression");
-            ansText = ansText.replace(expression, "【" + timeObj.getString("time") + "】");
+            if (isCron) {
+                List<Date> next5Date = DateUtils.getNext5ExcTime(cron);
+                if (CollectionUtils.isEmpty(next5Date)) {
+                    continue;
+                }
+                req.setSendTime(next5Date.get(0));
+                req.setTaskType(SmsTaskType.CRON);
+                req.setCronExpression(cron);
+                ansBuilder.append("下三次提醒时间:\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(0), DateUtils.FORMAT_19)).append("]\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(1), DateUtils.FORMAT_19)).append("]\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(2), DateUtils.FORMAT_19)).append("]\r\n");
+            } else {
+                req.setTaskType(SmsTaskType.NO_CRON);
+                req.setSendTime(time);
+                ansBuilder.append("提醒时间:\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(time, DateUtils.FORMAT_19)).append("]\r\n");
+            }
+            taskList.add(req);
         }
-        return ansText;
+        boolean res = addTask(taskList);
+        if (!res) {
+            return "提醒任务添加失败，请稍后重试";
+        }
+        log.debug(JSON.toJSONString(taskList));
+        return ansBuilder.toString();
+    }
+
+    private boolean addTask(List<AddSmsTaskReq> taskList) {
+        JSONObject paramObj = new JSONObject();
+        paramObj.put("list", taskList);
+        JSONObject res = smsService.addSmsTask(paramObj.toJSONString());
+        return "success".equals(res.getString("res"));
     }
 
     @Override
