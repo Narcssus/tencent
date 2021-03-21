@@ -46,7 +46,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
     }
 
 
-    public static List<Date> getNext5ExcTime(String cron) {
+    public static List<Date> getNextExcTime(String cron,int n) {
         if (StringUtils.isBlank(cron)) {
             return null;
         }
@@ -54,7 +54,7 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
             List<Date> list = new ArrayList<>();
             CronSequenceGenerator cronSequenceGenerator = new CronSequenceGenerator(cron);
             Date nextTimePoint = new Date();
-            for (int i = 0; i <= 5; i++) {
+            for (int i = 0; i <= n; i++) {
                 nextTimePoint = cronSequenceGenerator.next(nextTimePoint);
                 list.add(nextTimePoint);
             }

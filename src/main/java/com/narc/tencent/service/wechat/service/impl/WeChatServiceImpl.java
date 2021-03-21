@@ -263,17 +263,17 @@ public class WeChatServiceImpl implements WeChatService {
             String cron = timeObj.getString("cron");
             String expression = timeObj.getString("timeExpression");
             if (isCron) {
-                List<Date> next5Date = DateUtils.getNext5ExcTime(cron);
-                if (CollectionUtils.isEmpty(next5Date)) {
+                List<Date> next3Date = DateUtils.getNextExcTime(cron, 3);
+                if (CollectionUtils.isEmpty(next3Date)) {
                     continue;
                 }
-                req.setSendTime(next5Date.get(0));
+                req.setSendTime(next3Date.get(0));
                 req.setTaskType(SmsTaskType.CRON);
                 req.setCronExpression(cron);
                 ansBuilder.append("下三次提醒时间:\r\n")
-                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(0), DateUtils.FORMAT_19)).append("]\r\n")
-                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(1), DateUtils.FORMAT_19)).append("]\r\n")
-                        .append("[").append(DateUtils.convertDateToStr(next5Date.get(2), DateUtils.FORMAT_19)).append("]\r\n");
+                        .append("[").append(DateUtils.convertDateToStr(next3Date.get(0), DateUtils.FORMAT_19)).append("]\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(next3Date.get(1), DateUtils.FORMAT_19)).append("]\r\n")
+                        .append("[").append(DateUtils.convertDateToStr(next3Date.get(2), DateUtils.FORMAT_19)).append("]\r\n");
             } else {
                 req.setTaskType(SmsTaskType.NO_CRON);
                 req.setSendTime(time);
