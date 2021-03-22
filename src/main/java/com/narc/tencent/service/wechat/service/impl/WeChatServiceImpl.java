@@ -203,6 +203,9 @@ public class WeChatServiceImpl implements WeChatService {
                 case "SHOW_HELP":
                     //显示当前模式的使用说明
                     return getHelp(nowPattern.getPermissionId());
+                case "SHOW_SMS_TASK":
+                    //显示短信提醒任务
+                    return getSmsTask(userInfo.getPhoneNo());
                 case "CHANGE_NAME":
                     //设置昵称模式
                     userInfo.setPattern("NAME|" + userInfo.getPattern());
@@ -248,20 +251,24 @@ public class WeChatServiceImpl implements WeChatService {
             return "未识别出您的语音中的时间，请用标准话重说一次";
         }
         StringBuilder ansBuilder = new StringBuilder();
-        ansBuilder.append("[").append(nlpRes.getString("formatStr")).append("]")
+        String formatStr = nlpRes.getString("formatStr");
+        ansBuilder.append("[").append(formatStr).append("]")
                 .append("\r\n任务已设置完成，");
         List<AddSmsTaskReq> taskList = new ArrayList<>();
+        int taskMaxNo = getSmsTaskMaxNo(userInfo.getPhoneNo());
         for (int i = 0; i < timeList.size(); i++) {
+            taskMaxNo++;
             AddSmsTaskReq req = new AddSmsTaskReq();
-            req.setTemplateId("893655");
+            req.setTemplateId("899889");
             req.setPhoneNumberSet(JSON.toJSONString(Collections.singletonList(userInfo.getPhoneNo())));
-            // TODO: 2021/3/19 模板参数
-            req.setTemplateParam(JSON.toJSONString(Collections.singletonList("1")));
+            req.setExtDataA("" + taskMaxNo);
+            req.setTemplateParam(JSON.toJSONString(Collections.singletonList("" + taskMaxNo)));
             JSONObject timeObj = timeList.getJSONObject(i);
             Date time = timeObj.getDate("time");
             boolean isCron = timeObj.getBoolean("isCron");
             String cron = timeObj.getString("cron");
             String expression = timeObj.getString("timeExpression");
+            req.setExtDataB(formatStr.replace(expression, ""));
             if (isCron) {
                 List<Date> next3Date = DateUtils.getNextExcTime(cron, 3);
                 if (CollectionUtils.isEmpty(next3Date)) {
@@ -270,14 +277,14 @@ public class WeChatServiceImpl implements WeChatService {
                 req.setSendTime(next3Date.get(0));
                 req.setTaskType(SmsTaskType.CRON);
                 req.setCronExpression(cron);
-                ansBuilder.append("下三次提醒时间:\r\n")
+                ansBuilder.append("任务编号[").append(taskMaxNo).append("]下三次提醒时间:\r\n")
                         .append("[").append(DateUtils.convertDateToStr(next3Date.get(0), DateUtils.FORMAT_19)).append("]\r\n")
                         .append("[").append(DateUtils.convertDateToStr(next3Date.get(1), DateUtils.FORMAT_19)).append("]\r\n")
                         .append("[").append(DateUtils.convertDateToStr(next3Date.get(2), DateUtils.FORMAT_19)).append("]\r\n");
             } else {
                 req.setTaskType(SmsTaskType.NO_CRON);
                 req.setSendTime(time);
-                ansBuilder.append("提醒时间:\r\n")
+                ansBuilder.append("任务编号[").append(taskMaxNo).append("]提醒时间:\r\n")
                         .append("[").append(DateUtils.convertDateToStr(time, DateUtils.FORMAT_19)).append("]\r\n");
             }
             taskList.add(req);
@@ -295,6 +302,34 @@ public class WeChatServiceImpl implements WeChatService {
         paramObj.put("list", taskList);
         JSONObject res = smsService.addSmsTask(paramObj.toJSONString());
         return "success".equals(res.getString("res"));
+    }
+
+    private int getSmsTaskMaxNo(String phoneNo) {
+        List<AddSmsTaskReq> list = getSmsTaskList(phoneNo);
+        if (CollectionUtils.isEmpty(list)) {
+            return 1;
+        }
+        int max = 1;
+        for (AddSmsTaskReq req : list) {
+            try {
+                int a = Integer.parseInt(req.getExtDataA());
+                max = Math.max(max, a);
+            } catch (Exception e) {
+            }
+        }
+        return max;
+    }
+
+    private List<AddSmsTaskReq> getSmsTaskList(String phoneNo) {
+        JSONObject req = new JSONObject();
+        req.put("phoneNo", phoneNo);
+        JSONObject res = smsService.getSmsTask(req.toJSONString());
+        JSONArray list = res.getJSONArray("list");
+        List<AddSmsTaskReq> resList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            resList.add(JSON.parseObject(list.getJSONObject(i).toJSONString(), AddSmsTaskReq.class));
+        }
+        return resList;
     }
 
     @Override
@@ -350,6 +385,23 @@ public class WeChatServiceImpl implements WeChatService {
             return "当前模式没有相关使用说明";
         }
         return nowPattern.getHelp();
+    }
+
+    private String getSmsTask(String phoneNo) {
+        List<AddSmsTaskReq> list = getSmsTaskList(phoneNo);
+        if(CollectionUtils.isEmpty(list)){
+            return "您尚未设置提醒任务";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (AddSmsTaskReq req : list) {
+            sb.append("====").append("任务编号[").append(req.getExtDataA()).append("]")
+                    .append("====\n")
+                    .append("提醒内容[").append(req.getExtDataB()).append("]\n")
+                    .append("下次提醒时间[").append(DateUtils.convertDateToStr(
+                    req.getSendTime(), DateUtils.FORMAT_19
+            )).append("]\n");
+        }
+        return sb.toString();
     }
 
     private String tranTkl(String originalWord, String type, String senderId, String senderName) {

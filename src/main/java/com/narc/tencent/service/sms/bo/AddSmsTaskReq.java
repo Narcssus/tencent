@@ -20,4 +20,7 @@ public class AddSmsTaskReq {
     private String cronExpression;
     private Date sendTime;
 
+    private String extDataA;
+    private String extDataB;
+
 }

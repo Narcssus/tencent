@@ -20,7 +20,7 @@ public interface SmsService {
     @RequestMapping(value = "/sms/addSmsTask", method = RequestMethod.POST)
     JSONObject addSmsTask(@RequestParam("param") String param);
 
-    @RequestMapping(value = "/alimama/getSmsTask", method = RequestMethod.GET)
+    @RequestMapping(value = "/sms/getSmsTask", method = RequestMethod.GET)
     JSONObject getSmsTask(@RequestParam("param") String param);
 
 }
