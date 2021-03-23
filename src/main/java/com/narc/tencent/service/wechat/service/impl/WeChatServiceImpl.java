@@ -206,6 +206,9 @@ public class WeChatServiceImpl implements WeChatService {
                 case "SHOW_SMS_TASK":
                     //显示短信提醒任务
                     return getSmsTask(userInfo.getPhoneNo());
+                case "CANCEL_SMS_TASK":
+                    //取消短信提醒任务
+                    return cancelSmsTask(userInfo.getPhoneNo(), content);
                 case "CHANGE_NAME":
                     //设置昵称模式
                     userInfo.setPattern("NAME|" + userInfo.getPattern());
@@ -307,9 +310,9 @@ public class WeChatServiceImpl implements WeChatService {
     private int getSmsTaskMaxNo(String phoneNo) {
         List<AddSmsTaskReq> list = getSmsTaskList(phoneNo);
         if (CollectionUtils.isEmpty(list)) {
-            return 1;
+            return 0;
         }
-        int max = 1;
+        int max = 0;
         for (AddSmsTaskReq req : list) {
             try {
                 int a = Integer.parseInt(req.getExtDataA());
@@ -389,7 +392,7 @@ public class WeChatServiceImpl implements WeChatService {
 
     private String getSmsTask(String phoneNo) {
         List<AddSmsTaskReq> list = getSmsTaskList(phoneNo);
-        if(CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return "您尚未设置提醒任务";
         }
         StringBuilder sb = new StringBuilder();
@@ -402,6 +405,25 @@ public class WeChatServiceImpl implements WeChatService {
             )).append("]\n");
         }
         return sb.toString();
+    }
+
+    private String cancelSmsTask(String phoneNo, String content) {
+        content = content.replace("取消任务", "");
+        content = content.replace("取消提醒", "");
+        int seqNo = 0;
+        try {
+            seqNo = Integer.parseInt(content);
+        } catch (Exception e) {
+            return "取消提醒任务失败，请输入正确的任务编号";
+        }
+        JSONObject req = new JSONObject();
+        req.put("phoneNo", phoneNo);
+        req.put("taskSeqNo", seqNo);
+        JSONObject res = smsService.cancelSmsTask(req.toJSONString());
+        if (!"success".equals(res.getString("res"))) {
+            return "取消提醒任务<" + seqNo + ">失败";
+        }
+        return "取消提醒任务<" + seqNo + ">成功";
     }
 
     private String tranTkl(String originalWord, String type, String senderId, String senderName) {

@@ -19,6 +19,11 @@ public class SmsDefaultFallbackImpl implements SmsService {
         log.info("请求：{}，降级处理", param);
         return null;
     }
+    @Override
+    public JSONObject cancelSmsTask(String param) {
+        log.info("请求：{}，降级处理", param);
+        return null;
+    }
 
     @Override
     public JSONObject getSmsTask(String param) {
