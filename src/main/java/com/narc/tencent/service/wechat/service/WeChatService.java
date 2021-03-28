@@ -25,4 +25,6 @@ public interface WeChatService {
 
     String dealEvent(String event, WxtUserInfo userInfo);
 
+    String dealPic(String picUrl, WxtUserInfo userInfo);
+
 }

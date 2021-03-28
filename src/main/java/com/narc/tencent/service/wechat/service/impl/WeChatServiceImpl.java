@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.narc.tencent.service.alimama.service.AlimamaService;
+import com.narc.tencent.service.baidu.BaiduService;
 import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.sms.bo.AddSmsTaskReq;
 import com.narc.tencent.service.sms.enums.SmsTaskType;
@@ -59,6 +60,8 @@ public class WeChatServiceImpl implements WeChatService {
     private NlpService nlpService;
     @Autowired
     private SmsService smsService;
+    @Autowired
+    private BaiduService baiduService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -96,7 +99,7 @@ public class WeChatServiceImpl implements WeChatService {
                     rspContent = dealVoice(msgLog, userInfo);
                     break;
                 case WechatMessageUtil.MESSAGE_IMAGE:
-                    rspContent = "暂不支持图片处理";
+                    rspContent = dealPic(msgLog.getPicUrl(), userInfo);
                     break;
                 default:
                     break;
@@ -351,6 +354,14 @@ public class WeChatServiceImpl implements WeChatService {
                 break;
         }
         return rspContent;
+    }
+
+    @Override
+    public String dealPic(String picUrl, WxtUserInfo userInfo) {
+        JSONObject req = new JSONObject();
+        req.put("picUrl", picUrl);
+        JSONObject res = baiduService.doOCR(req.toJSONString());
+        return res.getString("res");
     }
 
     private String returnTextMessage(String rspContent, String fromUserName, String toUserName) {
