@@ -338,6 +338,18 @@ public class WeChatServiceImpl implements WeChatService {
         return resList;
     }
 
+    private List<AddSmsTaskReq> getDoneSmsTaskList(String phoneNo) {
+        JSONObject req = new JSONObject();
+        req.put("phoneNo", phoneNo);
+        JSONObject res = smsService.getSmsTask(req.toJSONString());
+        JSONArray list = res.getJSONArray("doneList");
+        List<AddSmsTaskReq> resList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            resList.add(JSON.parseObject(list.getJSONObject(i).toJSONString(), AddSmsTaskReq.class));
+        }
+        return resList;
+    }
+
     @Override
     public String dealEvent(String event, WxtUserInfo userInfo) {
         String rspContent = "暂不支持";
@@ -403,10 +415,21 @@ public class WeChatServiceImpl implements WeChatService {
 
     private String getSmsTask(String phoneNo) {
         List<AddSmsTaskReq> list = getSmsTaskList(phoneNo);
-        if (CollectionUtils.isEmpty(list)) {
+        List<AddSmsTaskReq> doneList = getDoneSmsTaskList(phoneNo);
+        if (CollectionUtils.isEmpty(list) && CollectionUtils.isEmpty(doneList)) {
             return "您尚未设置提醒任务";
         }
         StringBuilder sb = new StringBuilder();
+        sb.append("*****").append("已到期任务").append("*****\n");
+        for (AddSmsTaskReq req : doneList) {
+            sb.append("====").append("任务编号[").append(req.getExtDataA()).append("]")
+                    .append("====\n")
+                    .append("提醒内容[").append(req.getExtDataB()).append("]\n")
+                    .append("下次提醒时间[").append(DateUtils.convertDateToStr(
+                    req.getSendTime(), DateUtils.FORMAT_19
+            )).append("]\n");
+        }
+        sb.append("*****").append("未到期任务").append("*****\n");
         for (AddSmsTaskReq req : list) {
             sb.append("====").append("任务编号[").append(req.getExtDataA()).append("]")
                     .append("====\n")
