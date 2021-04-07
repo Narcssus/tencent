@@ -21,17 +21,17 @@ import java.util.Map;
 @Slf4j
 public class HttpUtils {
 
-    public static JSONObject httpGet(String  url,JSONObject jsonObject) throws URISyntaxException {
+    public static JSONObject httpGet(String url, JSONObject jsonObject) throws URISyntaxException {
         URIBuilder uriBuilder = new URIBuilder(url);
-        for(String key : jsonObject.keySet()){
-            uriBuilder.addParameter(key,jsonObject.getString(key));
+        for (String key : jsonObject.keySet()) {
+            uriBuilder.addParameter(key, jsonObject.getString(key));
         }
-        log.info("请求URL："+uriBuilder.toString());
-        return  sendGet(uriBuilder.toString());
+        log.info("请求URL：" + uriBuilder.toString());
+        return JSON.parseObject(sendGet(uriBuilder.toString()));
     }
 
 
-    public static JSONObject sendGet(String url) {
+    public static String sendGet(String url) {
         BufferedReader in = null;
         String result = "";
         try {
@@ -66,7 +66,7 @@ public class HttpUtils {
                 e2.printStackTrace();
             }
         }
-        return JSON.parseObject(result);
+        return result;
     }
 
 }
