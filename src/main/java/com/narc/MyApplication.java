@@ -1,4 +1,4 @@
-package com.narc.tencent;
+package com.narc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,10 +15,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableEurekaClient
 @EnableFeignClients
 @EnableHystrix
-public class TencentApplication extends SpringBootServletInitializer {
+public class MyApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(TencentApplication.class, args);
+        SpringApplication.run(MyApplication.class, args);
     }
 
 }
