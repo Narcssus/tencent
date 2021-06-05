@@ -19,7 +19,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://test:narc1234@106.53.247.226:8761/eureka/,http://test:narc1234@106.52.120.197:8761/eureka/
-  enabled: false
+    enabled: false
   instance:
     ip-address: ${local-ip}
     instance-id: ${local-ip}:${server.port}
