@@ -1,5 +1,6 @@
-package com.narc.sms.config;
+package com.narc.tencent.config;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +21,29 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig implements WebMvcConfigurer {
+public class TencentSwaggerConfig implements WebMvcConfigurer {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
     @Bean
-    public Docket smsRestApi() {
+    public Docket wechatRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.narc.sms.service.sms.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.narc.tencent.service.wechat.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public Docket smsRestApi2() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("短信相关接口")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.narc.tencent.service.sms.controller"))
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build();
     }

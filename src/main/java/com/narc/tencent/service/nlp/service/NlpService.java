@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date : 2021/3/18 10:59
  */
 @Primary
-@FeignClient(name = "nlp", fallback = NlpDefaultFallbackImpl.class)
 public interface NlpService {
 
 

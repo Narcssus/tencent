@@ -158,4 +158,57 @@ public class SmsServiceImpl implements SmsService {
         res.put("doneList", doneList);
         return res;
     }
+
+    @Value("${sms.adminPhone}")
+    private String adminPhone;
+
+    @Override
+    public JSONObject sendAlimamaAuthCodeNotice(String param) {
+        try {
+            log.debug("收到sendAlimamaAuthCodeNotice消息");
+            String[] phones = {adminPhone};
+            String[] templateParam = {};
+            sendMessage("892286", phones, templateParam, null);
+            return new JSONObject();
+        } catch (Exception e) {
+            log.error("", e);
+            return new JSONObject();
+        }
+    }
+
+    @Override
+    public JSONObject sendAlimamaUndoOrderNotice(String param) {
+        try {
+            log.debug("收到sendAlimamaUndoOrderNotice消息:{}",param);
+            JSONObject jsonObject = JSON.parseObject(param);
+            String[] phones = {adminPhone};
+            String[] templateParam = {jsonObject.getString("num")};
+            sendMessage("899355", phones, templateParam, null);
+            return new JSONObject();
+        } catch (Exception e) {
+            log.error("", e);
+            return new JSONObject();
+        }
+    }
+
+    @Override
+    public JSONObject addSmsTask(String param) {
+        log.debug("收到addSmsTask消息:{}", param);
+        JSONObject paramObject = JSON.parseObject(param);
+        return addSmsTask(paramObject);
+    }
+    @Override
+    public JSONObject cancelSmsTask(String param) {
+        log.debug("收到cancelSmsTask消息:{}", param);
+        JSONObject paramObject = JSON.parseObject(param);
+        return cancelSmsTask(paramObject);
+    }
+
+    @Override
+    public JSONObject getSmsTask(String param) {
+        log.debug("收到getSmsTask消息:{}", param);
+        JSONObject paramObject = JSON.parseObject(param);
+        return getSmsTask(paramObject);
+    }
+
 }

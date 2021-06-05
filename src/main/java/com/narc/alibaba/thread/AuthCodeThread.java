@@ -2,8 +2,8 @@ package com.narc.alibaba.thread;
 
 import com.narc.alibaba.service.alimama.dao.service.AlitConfigDaoService;
 import com.narc.alibaba.service.alimama.entity.AlitConfig;
-import com.narc.alibaba.service.tencent.service.SmsService;
 import com.narc.alibaba.utils.DateUtils;
+import com.narc.sms.service.sms.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;

@@ -3,12 +3,12 @@ package com.narc.tencent.service.wechat.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.narc.tencent.service.alimama.service.AlimamaService;
+import com.narc.sms.service.sms.service.SmsService;
+import com.narc.alibaba.service.alimama.service.AlimamaService;
 import com.narc.tencent.service.baidu.BaiduService;
 import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.sms.bo.AddSmsTaskReq;
 import com.narc.tencent.service.sms.enums.SmsTaskType;
-import com.narc.tencent.service.sms.service.SmsService;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtMessageLogDaoService;
 import com.narc.tencent.service.wechat.dao.service.WxtUserInfoDaoService;
@@ -22,6 +22,7 @@ import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.DateUtils;
 import com.narc.tencent.utils.UuidUtils;
 import com.narc.tencent.utils.WechatMessageUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class WeChatServiceImpl implements WeChatService {
 
     private final AlimamaService alimamaService;
@@ -48,13 +50,6 @@ public class WeChatServiceImpl implements WeChatService {
     private final CftPermissionDaoService cftPermissionDaoService;
     private final WxtMessageLogDaoService wxtMessageLogDaoService;
 
-    public WeChatServiceImpl(AlimamaService alimamaService, WxtUserInfoDaoService wxtUserInfoDaoService, WxtUserRoleDaoService wxtUserRoleDaoService, CftPermissionDaoService cftPermissionDaoService, WxtMessageLogDaoService wxtMessageLogDaoService) {
-        this.alimamaService = alimamaService;
-        this.wxtUserInfoDaoService = wxtUserInfoDaoService;
-        this.wxtUserRoleDaoService = wxtUserRoleDaoService;
-        this.cftPermissionDaoService = cftPermissionDaoService;
-        this.wxtMessageLogDaoService = wxtMessageLogDaoService;
-    }
 
     @Autowired
     private NlpService nlpService;
@@ -470,7 +465,7 @@ public class WeChatServiceImpl implements WeChatService {
         JSONObject res = new JSONObject();
         try {
             log.info("调用alimamaService，请求：{}", paramObject.toJSONString());
-            res = alimamaService.tranTkl(paramObject.toJSONString());
+            res = alimamaService.tranShareWord(paramObject);
         } catch (Exception e) {
             log.error("", e);
         }
@@ -487,7 +482,7 @@ public class WeChatServiceImpl implements WeChatService {
         JSONObject res = new JSONObject();
         try {
             log.info("调用alimamaService-dealTklAdmin，请求：{}", paramObject.toJSONString());
-            res = alimamaService.dealTklAdmin(paramObject.toJSONString());
+            res = alimamaService.dealTklAdmin(paramObject);
         } catch (Exception e) {
             log.error("", e);
         }

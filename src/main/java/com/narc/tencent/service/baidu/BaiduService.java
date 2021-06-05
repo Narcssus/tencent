@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date : 2021/3/28 20:09
  */
 @Primary
-@FeignClient(name = "baidu", fallback = BaiduDefaultFallbackImpl.class)
 public interface BaiduService {
 
     @RequestMapping(value = "baidu/ocr/doOCR", method = RequestMethod.GET)
