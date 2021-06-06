@@ -16,7 +16,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableEurekaClient
 @EnableFeignClients
 @EnableHystrix
-@MapperScan("com.narc")
 public class MyApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

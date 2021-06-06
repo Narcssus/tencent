@@ -4,6 +4,7 @@ import com.narc.alibaba.service.alimama.dao.service.AlitThreadCompetitionInfoDao
 import com.narc.alibaba.service.alimama.entity.AlitThreadCompetitionInfo;
 import com.narc.alibaba.service.alimama.service.AlimamaService;
 import com.narc.alibaba.utils.DateUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -20,10 +21,10 @@ import java.util.Date;
 @Component
 @EnableScheduling
 @Slf4j
+@RequiredArgsConstructor
 public class OrderThread extends CommonTask {
 
-    @Autowired
-    private AlimamaService alimamaService;
+    private final AlimamaService alimamaService;
 
     private static final int THREAD_ID = 1;
     private static final int INTERVAL_TIME = 15;
