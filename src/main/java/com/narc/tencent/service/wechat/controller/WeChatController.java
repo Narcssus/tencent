@@ -1,7 +1,5 @@
 package com.narc.tencent.service.wechat.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;

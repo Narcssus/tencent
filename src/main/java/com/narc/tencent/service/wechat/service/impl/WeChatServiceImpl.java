@@ -3,10 +3,10 @@ package com.narc.tencent.service.wechat.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.narc.baidu.service.baidu.service.BaiduService;
+import com.narc.nlp.service.nlp.service.TimeNlpService;
 import com.narc.sms.service.sms.service.SmsService;
 import com.narc.alibaba.service.alimama.service.AlimamaService;
-import com.narc.tencent.service.baidu.BaiduService;
-import com.narc.tencent.service.nlp.service.NlpService;
 import com.narc.tencent.service.sms.bo.AddSmsTaskReq;
 import com.narc.tencent.service.sms.enums.SmsTaskType;
 import com.narc.tencent.service.wechat.dao.service.CftPermissionDaoService;
@@ -49,14 +49,12 @@ public class WeChatServiceImpl implements WeChatService {
     private final WxtUserRoleDaoService wxtUserRoleDaoService;
     private final CftPermissionDaoService cftPermissionDaoService;
     private final WxtMessageLogDaoService wxtMessageLogDaoService;
+    private final TimeNlpService timeNlpService;
+    private final BaiduService baiduService;
 
 
-    @Autowired
-    private NlpService nlpService;
     @Autowired
     private SmsService smsService;
-    @Autowired
-    private BaiduService baiduService;
 
     @Override
     public String processRequest(HttpServletRequest request) {
@@ -246,7 +244,7 @@ public class WeChatServiceImpl implements WeChatService {
         if (StringUtils.isBlank(asrText)) {
             return "未识别出您的语音，请用标准话重说一次或稍候再试";
         }
-        JSONObject nlpRes = nlpService.timeNlp(asrText);
+        JSONObject nlpRes = timeNlpService.doTimeNlp(asrText);
         JSONArray timeList = nlpRes.getJSONArray("timeList");
         if (CollectionUtils.isEmpty(timeList)) {
             return "未识别出您的语音中的时间，请用标准话重说一次";
@@ -367,7 +365,7 @@ public class WeChatServiceImpl implements WeChatService {
     public String dealPic(String picUrl, WxtUserInfo userInfo) {
         JSONObject req = new JSONObject();
         req.put("picUrl", picUrl);
-        JSONObject res = baiduService.doOCR(req.toJSONString());
+        JSONObject res = baiduService.doOCR(req);
         return res.getString("res");
     }
 

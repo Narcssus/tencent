@@ -133,6 +133,19 @@
             <!-- 请到https://search.maven.org/search?q=tencentcloud-sdk-java查询所有版本，最新版本如下 -->
             <version>3.1.226</version>
         </dependency>
+        <!-- 此包修改自 https://github.com/shinyke/Time-NLP/ author: shinyke -->
+        <dependency>
+            <groupId>com.time</groupId>
+            <artifactId>nlp</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/Time-NLP-1.0.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.15.7</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
