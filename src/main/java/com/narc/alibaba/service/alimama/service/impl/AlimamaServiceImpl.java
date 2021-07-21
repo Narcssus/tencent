@@ -481,19 +481,6 @@ public class AlimamaServiceImpl implements AlimamaService {
     }
 
     private TbkDgMaterialOptionalResponse.MapData getItem(String originalWord) {
-        if (originalWord.contains("https")) {
-            //用链接的方式找
-            String httpContent = HttpUtils.sendGet(getUrlByWord(originalWord));
-            String itemId = getItemId(httpContent);
-            String itemName = getNameById(itemId);
-            if (itemName == null) {
-                itemName = getName(httpContent);
-            }
-            TbkDgMaterialOptionalResponse.MapData mapData = getItemByTitleAndId(itemName, itemId);
-            if (mapData != null) {
-                return mapData;
-            }
-        }
         //用第三方工具找
 //        String word = getWordByContent(originalWord);
         try {
@@ -525,9 +512,9 @@ public class AlimamaServiceImpl implements AlimamaService {
         TaobaoClient client = new DefaultTaobaoClient(apiUrl, appKey, appSecret,
                 "json", 1000, 3000);
 
-        if (itemName.contains("】")) {
-            itemName = itemName.substring(itemName.lastIndexOf("【") + 1, itemName.lastIndexOf("】"));
-        }
+//        if (itemName.contains("】")) {
+////            itemName = itemName.substring(itemName.lastIndexOf("【") + 1, itemName.lastIndexOf("】"));
+////        }
         log.debug("调用淘宝接口搜索商品,名称：{}，id:{}", itemName, itemId);
         try {
             TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
