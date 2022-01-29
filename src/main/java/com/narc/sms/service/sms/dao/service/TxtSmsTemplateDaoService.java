@@ -29,4 +29,8 @@ public class TxtSmsTemplateDaoService {
         }
         return template.getTemplateContent();
     }
+
+    public TxtSmsTemplate getTemplateById(String id) {
+        return txtSmsTemplateMapper.selectByPrimaryKey(id);
+    }
 }

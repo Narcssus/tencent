@@ -261,13 +261,13 @@ public class WeChatServiceImpl implements WeChatService {
             req.setTemplateId("899889");
             req.setPhoneNumberSet(JSON.toJSONString(Collections.singletonList(userInfo.getPhoneNo())));
             req.setExtDataA("" + taskMaxNo);
-            req.setTemplateParam(JSON.toJSONString(Collections.singletonList("" + taskMaxNo)));
             JSONObject timeObj = timeList.getJSONObject(i);
             Date time = timeObj.getDate("time");
             boolean isCron = timeObj.getBoolean("isCron");
             String cron = timeObj.getString("cron");
             String expression = timeObj.getString("timeExpression");
             req.setExtDataB(formatStr.replace(expression, ""));
+            req.setTemplateParam(JSON.toJSONString(Collections.singletonList("" + req.getExtDataB())));
             if (isCron) {
                 List<Date> next3Date = DateUtils.getNextExcTime(cron, 3);
                 if (CollectionUtils.isEmpty(next3Date)) {

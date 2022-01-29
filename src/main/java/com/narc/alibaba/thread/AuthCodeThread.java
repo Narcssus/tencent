@@ -40,12 +40,12 @@ public class AuthCodeThread extends CommonTask {
 
     @Override
     public void doTask() {
-        Date now = new Date();
-        log.debug("执行管理员配置检查定时任务，{}", DateUtils.convertDateToStr(now, DateUtils.FORMAT_19));
-        AlitConfig config = alitConfigDaoService.getByKey("taobao_user_id");
-        if (config == null || DateUtils.getDateDiffDay(now, config.getModifiedDatetime()) <= 3) {
-            smsService.sendAlimamaAuthCodeNotice("");
-        }
+//        Date now = new Date();
+////        log.debug("执行管理员配置检查定时任务，{}", DateUtils.convertDateToStr(now, DateUtils.FORMAT_19));
+////        AlitConfig config = alitConfigDaoService.getByKey("taobao_user_id");
+////        if (config == null || DateUtils.getDateDiffDay(now, config.getModifiedDatetime()) <= 3) {
+////            smsService.sendAlimamaAuthCodeNotice("");
+////        }
 
     }
 

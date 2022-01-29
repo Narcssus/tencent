@@ -1,5 +1,6 @@
 package com.narc.tencent.service.wechat.controller;
 
+import com.narc.sms.service.sms.service.SmsService;
 import com.narc.tencent.service.wechat.service.WeChatService;
 import com.narc.tencent.utils.CheckUtil;
 import io.swagger.annotations.Api;
@@ -66,18 +67,21 @@ public class WeChatController {
         }
     }
 
-//    @Autowired
-//    private NlpService nlpService;
-//
-//    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
-//    public String test(String param) {
-//        try {
-//            JSONObject jsonObject = nlpService.timeNlp(param);
-//            return jsonObject.toJSONString();
-//        } catch (Exception e) {
-//            log.error("", e);
-//            return null;
-//        }
-//    }
+    @Autowired
+    private SmsService smsService;
+
+    @PostMapping(value = "/test", produces = "application/text;charset=UTF-8")
+    public String test(String param) {
+        try {
+            String[] phones = {"narcssusinnook@163.com"};
+            String[] params = {"1"};
+
+            smsService.sendMessage("899889", phones, params, "123");
+            return "123";
+        } catch (Exception e) {
+            log.error("", e);
+            return null;
+        }
+    }
 
 }
