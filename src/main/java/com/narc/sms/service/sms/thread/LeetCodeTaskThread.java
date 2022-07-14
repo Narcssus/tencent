@@ -45,7 +45,7 @@ public class LeetCodeTaskThread extends CommonTask {
     /**
      * 每天12点执行一次
      */
-    @Scheduled(cron = "0 0 12,16,18,21 * * ?")
+//    @Scheduled(cron = "0 0 12,16,18,21 * * ?")
     public void doFetchOrders() {
         runTask(THREAD_ID, INTERVAL_TIME);
     }
